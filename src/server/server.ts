@@ -57,6 +57,38 @@ server.get(ClientRouter['/banner'].toString(), function (req, res) {
   );
 });
 
+server.get(ClientRouter['/wordle'].toString(), function (req, res) {
+  const layoutData: LayoutData = {
+    html: {
+      is_mobile: 'false',
+    },
+    head: {
+      title: 'wordle',
+      description: '박병훈의 wordle 게임입니다.',
+    },
+  };
+
+  res.locals.layoutData = layoutData;
+
+  res.send(
+    new MetaView(ClientRouter['/wordle']({}, { is_mobile: true }), res.locals.layoutData).toHtml(),
+  );
+});
+
 server.get('/', (req, res) => {
-  res.send('Hello, this is RUNE + RUNE Server!');
+  const layoutData: LayoutData = {
+    html: {
+      is_mobile: 'false',
+    },
+    head: {
+      title: 'wordle',
+      description: '박병훈의 wordle 게임입니다.',
+    },
+  };
+
+  res.locals.layoutData = layoutData;
+
+  res.send(
+      new MetaView(ClientRouter['/']({}, { is_mobile: true }), res.locals.layoutData).toHtml(),
+  );
 });

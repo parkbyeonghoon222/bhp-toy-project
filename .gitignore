@@ -1,2 +1,4 @@
 /node_modules/
 /.rune/
+/.idea/watcherTasks.xml
+/.idea/webResources.xml
