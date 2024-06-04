@@ -1,7 +1,7 @@
-import { html, Page } from 'rune-ts';
-import { homePage } from './HomePage';
-import { gameBoardPage } from './GameBoardPage';
-import { StyleView } from './style';
+import { html, Page } from "rune-ts";
+import { homePage } from "./HomePage";
+import { gameBoardPage } from "./GameBoardPage";
+import { StyleView } from "./style";
 
 export type Wordle = Record<string, string>;
 
@@ -27,7 +27,7 @@ export class HomePage extends Page<Home> {
     return html`
       <div>
         ${new StyleView({})}
-        <div id="wordle"></div>
+        <div id="home"></div>
       </div>
     `;
   }
@@ -38,6 +38,6 @@ export class HomePage extends Page<Home> {
 }
 
 export const WordleRouter = {
-  ['/wordle']: WordlePage,
-  ['/']: HomePage,
+  ["/wordle"]: WordlePage,
+  ["/"]: HomePage,
 };
