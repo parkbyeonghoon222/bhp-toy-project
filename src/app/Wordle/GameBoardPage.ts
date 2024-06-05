@@ -1,6 +1,7 @@
 import { GameBoardView } from "./ui/GameBoardView";
+import { GameManualView } from "./ui/GameManualView";
 
 export function gameBoardPage() {
-  const element = new GameBoardView({}).render();
-  document.querySelector("#wordle")!.append(element);
+  document.querySelector("#wordle")!.append(new GameBoardView({}).render());
+  document.querySelector("#body")!.append(new GameManualView({}).render());
 }
