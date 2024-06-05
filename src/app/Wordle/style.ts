@@ -32,7 +32,7 @@ export class StyleView extends View<object> {
 
       #wordle {
         width: 100%;
-        margin: 0 auto;
+        margin: 20px auto;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -89,6 +89,41 @@ export class StyleView extends View<object> {
           border: 2px solid #009444;
           background: #009444;
           color: #ffffff;
+        }
+      }
+
+      #keyboard {
+        margin: 0 auto;
+        width: 500px;
+
+        & .keyboard__row {
+          display: flex;
+          justify-content: center;
+          margin-bottom: 10px;
+          gap: 10px;
+
+          & .keyboard__box {
+            user-select: none;
+            cursor: pointer;
+            width: 43px;
+            height: 58px;
+            border-radius: 5px;
+
+            font-size: 18px;
+            text-align: center;
+            line-height: 58px;
+
+            font-weight: 700;
+
+            background-color: #d9d9d9;
+
+            &[data-variant="enter"] {
+              width: 66px;
+            }
+
+            &[data-variant="backspace"] {
+            }
+          }
         }
       }
 

@@ -8,10 +8,11 @@ export type Wordle = Record<string, string>;
 export class WordlePage extends Page<Wordle> {
   override template() {
     return html`
-      <div>
+      <main>
         ${new StyleView({})}
-        <div id="wordle"></div>
-      </div>
+        <section id="wordle"></section>
+        <section id="keyboard"></section>
+      </main>
     `;
   }
 

@@ -10,7 +10,7 @@ import {
   throwIf,
   toArray,
 } from "@fxts/core";
-import { words } from "../const/const";
+import { WORDS } from "../const/const";
 import { GameBoardItemVariant, GameBoardItemView } from "./GameBoardItemView";
 
 const createGameBoard = () =>
@@ -96,6 +96,7 @@ export class GameBoardView extends View<GameBoard> {
     this.resetGame();
   }
 
+  // todo: 리팩토링 필요
   private submitAnswer() {
     const word = pipe(
       this.board,
@@ -157,7 +158,7 @@ export class GameBoardView extends View<GameBoard> {
   }
 
   private getRandomWord() {
-    return words[Math.floor(Math.random() * words.length)];
+    return WORDS[Math.floor(Math.random() * WORDS.length)];
   }
 
   private getWord() {
