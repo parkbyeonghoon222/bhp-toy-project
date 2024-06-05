@@ -12,6 +12,8 @@ import {
 } from "@fxts/core";
 import { WORDS } from "../const/const";
 import { GameBoardItemVariant, GameBoardItemView } from "./GameBoardItemView";
+import { KeyboardSelected } from "./GameKeyboardItemView";
+import { GameKeyboardView } from "./GameKeyboardView";
 
 const createGameBoard = () =>
   pipe(
@@ -35,9 +37,16 @@ export class GameBoardView extends View<GameBoard> {
   targetWord: string =
     localStorage.getItem("marpple__wordle") || this.getRandomWord();
   board = createGameBoard();
+  gameKeyboardView: GameKeyboardView = new GameKeyboardView({});
 
   override template({}: GameBoard) {
-    return html` <div class="wordle__container">${this.board}</div>`;
+    return html`
+      <div class="wordle__container">
+        <div class="wordle__game">${this.board}</div>
+
+        <div id="keyboard">${this.gameKeyboardView}</div>
+      </div>
+    `;
   }
 
   // todo: 함수형으로 바꿔보자
@@ -49,6 +58,16 @@ export class GameBoardView extends View<GameBoard> {
         this.removeBoardItem();
       } else if (e.code === "Enter") {
         this.submitAnswer();
+      }
+    });
+
+    this.addEventListener(KeyboardSelected, (e: KeyboardSelected) => {
+      if (e.detail.variant === "enter") {
+        this.submitAnswer();
+      } else if (e.detail.variant === "backspace") {
+        this.removeBoardItem();
+      } else {
+        this.appendBoardItem(e.detail.char);
       }
     });
   }

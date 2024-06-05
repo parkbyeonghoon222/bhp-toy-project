@@ -11,7 +11,6 @@ export class WordlePage extends Page<Wordle> {
       <main>
         ${new StyleView({})}
         <section id="wordle"></section>
-        <section id="keyboard"></section>
       </main>
     `;
   }

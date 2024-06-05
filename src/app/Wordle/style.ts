@@ -33,18 +33,22 @@ export class StyleView extends View<object> {
       #wordle {
         width: 100%;
         margin: 20px auto;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
 
         & .wordle__container {
-          width: 350px;
-
-          display: grid;
-          grid-template-columns: 62px 62px 62px 62px 62px;
-          grid-gap: 5px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
           align-items: center;
+          gap: 20px;
+
+          & .wordle__game {
+            width: 350px;
+
+            display: grid;
+            grid-template-columns: 62px 62px 62px 62px 62px;
+            grid-gap: 5px;
+            align-items: center;
+          }
         }
       }
 
