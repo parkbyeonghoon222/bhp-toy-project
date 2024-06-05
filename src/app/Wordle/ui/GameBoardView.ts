@@ -1,15 +1,28 @@
 import { html, View } from "rune-ts";
-import { map, pipe, range, toArray } from "@fxts/core";
+import {
+  each,
+  filter,
+  map,
+  pipe,
+  range,
+  tap,
+  throwIf,
+  toArray,
+} from "@fxts/core";
+import { words } from "../const/const";
+
+type GameBoardItemVariantType =
+  | "disabled"
+  | "empty"
+  | "entered"
+  | "include"
+  | "correct"
+  | "incorrect";
 
 export type GameBoardItem = {
   char: string;
-  variant?:
-    | "disabled"
-    | "empty"
-    | "entered"
-    | "include"
-    | "correct"
-    | "incorrect";
+  index: number;
+  variant: GameBoardItemVariantType;
 };
 
 export class GameBoardItemView extends View<GameBoardItem> {
@@ -18,6 +31,11 @@ export class GameBoardItemView extends View<GameBoardItem> {
       ${this.data.char}
     </div>`;
   }
+
+  public setBoardItem(char: string, variant: GameBoardItemVariantType) {
+    this.data.char = char;
+    this.data.variant = variant;
+  }
 }
 
 export type GameBoard = {};
@@ -25,6 +43,7 @@ export type GameBoard = {};
 export class GameBoardView extends View<GameBoard> {
   tryCnt: number = 0;
   currentIndex: number = 0;
+  targetWord: string = "";
   board = pipe(
     range(30),
     map(
@@ -32,6 +51,7 @@ export class GameBoardView extends View<GameBoard> {
         new GameBoardItemView({
           char: "",
           variant: index < 5 ? "empty" : "disabled",
+          index,
         }),
     ),
     toArray,
@@ -43,24 +63,26 @@ export class GameBoardView extends View<GameBoard> {
 
   // todo: 함수형으로 바꿔보자
   override onRender() {
+    this.getWord();
     window.addEventListener("keydown", (e: KeyboardEvent) => {
-      const currentEle = this.element().querySelector(
-        `.wordle__box:nth-of-type(${this.currentIndex + 1})`,
-      ) as HTMLDivElement;
       if (e.code.includes("Key")) {
-        this.appendBoardItem(currentEle, e.code.replace("Key", ""));
+        this.appendBoardItem(e.code.replace("Key", ""));
       } else if (e.code === "Backspace") {
-        this.removeBoardItem(currentEle);
+        this.removeBoardItem();
+      } else if (e.code === "Enter") {
+        this.submitAnswer();
       }
     });
   }
 
-  private appendBoardItem(currentEle: HTMLDivElement, char: string) {
+  private setCurrentBoardItem(char: string, variant: GameBoardItemVariantType) {
+    this.board[this.currentIndex].setBoardItem(char, variant);
+    this.board[this.currentIndex].redraw();
+  }
+
+  private appendBoardItem(char: string) {
     if (this.currentIndex < this.tryCnt * 5 + 5) {
-      this.board[this.currentIndex].data.char = char;
-      this.board[this.currentIndex].data.variant = "entered";
-      currentEle.innerHTML = char;
-      currentEle.setAttribute("data-variant", "entered");
+      this.setCurrentBoardItem(char, "entered");
       this.currentIndex =
         this.currentIndex + 1 < this.tryCnt * 5 + 5
           ? this.currentIndex + 1
@@ -68,16 +90,64 @@ export class GameBoardView extends View<GameBoard> {
     }
   }
 
-  private removeBoardItem(currentEle: HTMLDivElement) {
+  private removeBoardItem() {
     if (this.currentIndex >= this.tryCnt * 5) {
-      this.board[this.currentIndex].data.char = "";
-      this.board[this.currentIndex].data.variant = "empty";
-      currentEle.innerHTML = "";
-      currentEle.setAttribute("data-variant", "empty");
+      this.setCurrentBoardItem("", "empty");
       this.currentIndex =
         this.currentIndex - 1 >= this.tryCnt * 5
           ? this.currentIndex - 1
           : this.currentIndex;
     }
+  }
+
+  private submitAnswer() {
+    pipe(
+      this.board,
+      filter(
+        (board) =>
+          board.data.index < this.tryCnt * 5 + 5 &&
+          board.data.index >= this.tryCnt * 5 &&
+          board.data.char,
+      ),
+      toArray,
+      throwIf((boards) => boards.length !== 5),
+      tap((board) => {
+        this.tryCnt++;
+        this.currentIndex++;
+
+        pipe(
+          this.board,
+          filter(
+            (board) =>
+              board.data.index < this.tryCnt * 5 + 5 &&
+              board.data.index >= this.tryCnt * 5,
+          ),
+          each((board) => {
+            board.setBoardItem(board.data.char, "empty");
+            board.redraw();
+          }),
+        );
+        return board;
+      }),
+      each((board) => {
+        if (board.data.char === this.targetWord[board.data.index % 5]) {
+          board.setBoardItem(board.data.char, "correct");
+        } else if (this.targetWord.includes(board.data.char)) {
+          board.setBoardItem(board.data.char, "include");
+        } else {
+          board.setBoardItem(board.data.char, "incorrect");
+        }
+        board.redraw();
+      }),
+    );
+  }
+
+  private getWord() {
+    const targetWord =
+      localStorage.getItem("marpple-wordle") ||
+      words[Math.floor(Math.random() * words.length)];
+
+    localStorage.setItem("marpple-wordle", targetWord);
+    this.targetWord = targetWord;
   }
 }

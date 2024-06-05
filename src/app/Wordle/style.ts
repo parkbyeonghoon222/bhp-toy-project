@@ -41,6 +41,7 @@ export class StyleView extends View<object> {
 
             width: 62px;
             height: 62px;
+            font-weight: 700;
 
             &[data-variant="disabled"] {
               border: 2px solid #a2a2a2;
@@ -55,6 +56,24 @@ export class StyleView extends View<object> {
               border: 2px solid #000000;
               font-weight: 700;
               animation: scaleAnimation 0.2s ease-in-out;
+            }
+
+            &[data-variant="include"] {
+              border: 2px solid #99e0ff;
+              background: #99e0ff;
+              color: #ffffff;
+            }
+
+            &[data-variant="incorrect"] {
+              border: 2px solid #6b6b6b;
+              background: #6b6b6b;
+              color: #ffffff;
+            }
+
+            &[data-variant="correct"] {
+              border: 2px solid #009444;
+              background: #009444;
+              color: #ffffff;
             }
           }
         }
