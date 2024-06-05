@@ -5,46 +5,16 @@ import {
   map,
   pipe,
   range,
+  reduce,
   tap,
   throwIf,
   toArray,
 } from "@fxts/core";
 import { words } from "../const/const";
+import { GameBoardItemVariant, GameBoardItemView } from "./GameBoardItemView";
 
-type GameBoardItemVariantType =
-  | "disabled"
-  | "empty"
-  | "entered"
-  | "include"
-  | "correct"
-  | "incorrect";
-
-export type GameBoardItem = {
-  char: string;
-  index: number;
-  variant: GameBoardItemVariantType;
-};
-
-export class GameBoardItemView extends View<GameBoardItem> {
-  override template() {
-    return html` <div class="wordle__box" data-variant="${this.data.variant}">
-      ${this.data.char}
-    </div>`;
-  }
-
-  public setBoardItem(char: string, variant: GameBoardItemVariantType) {
-    this.data.char = char;
-    this.data.variant = variant;
-  }
-}
-
-export type GameBoard = {};
-
-export class GameBoardView extends View<GameBoard> {
-  tryCnt: number = 0;
-  currentIndex: number = 0;
-  targetWord: string = "";
-  board = pipe(
+const createGameBoard = () =>
+  pipe(
     range(30),
     map(
       (index) =>
@@ -57,13 +27,21 @@ export class GameBoardView extends View<GameBoard> {
     toArray,
   );
 
+export type GameBoard = {};
+
+export class GameBoardView extends View<GameBoard> {
+  tryCnt: number = 0;
+  currentIndex: number = 0;
+  targetWord: string =
+    localStorage.getItem("marpple__wordle") || this.getRandomWord();
+  board = createGameBoard();
+
   override template({}: GameBoard) {
     return html` <div class="wordle__container">${this.board}</div>`;
   }
 
   // todo: 함수형으로 바꿔보자
   override onRender() {
-    this.getWord();
     window.addEventListener("keydown", (e: KeyboardEvent) => {
       if (e.code.includes("Key")) {
         this.appendBoardItem(e.code.replace("Key", ""));
@@ -75,7 +53,7 @@ export class GameBoardView extends View<GameBoard> {
     });
   }
 
-  private setCurrentBoardItem(char: string, variant: GameBoardItemVariantType) {
+  private setCurrentBoardItem(char: string, variant: GameBoardItemVariant) {
     this.board[this.currentIndex].setBoardItem(char, variant);
     this.board[this.currentIndex].redraw();
   }
@@ -100,8 +78,26 @@ export class GameBoardView extends View<GameBoard> {
     }
   }
 
+  private resetGame() {
+    this.tryCnt = 0;
+    this.currentIndex = 0;
+    this.board = createGameBoard();
+    this.getWord();
+    this.redraw();
+  }
+
+  private winGame() {
+    alert("정답입니다!");
+    this.resetGame();
+  }
+
+  private looseGame() {
+    alert(`오답입니다. 정답은 ${this.targetWord}`);
+    this.resetGame();
+  }
+
   private submitAnswer() {
-    pipe(
+    const word = pipe(
       this.board,
       filter(
         (board) =>
@@ -111,10 +107,28 @@ export class GameBoardView extends View<GameBoard> {
       ),
       toArray,
       throwIf((boards) => boards.length !== 5),
-      tap((board) => {
+      tap((boards) => {
+        pipe(
+          boards,
+          each((board) => {
+            if (board.data.char === this.targetWord[board.data.index % 5]) {
+              board.setBoardItem(board.data.char, "correct");
+            } else if (this.targetWord.includes(board.data.char)) {
+              board.setBoardItem(board.data.char, "include");
+            } else {
+              board.setBoardItem(board.data.char, "incorrect");
+            }
+            board.redraw();
+          }),
+        );
+        return boards;
+      }),
+      tap((boards) => {
         this.tryCnt++;
         this.currentIndex++;
-
+        return boards;
+      }),
+      tap((boards) => {
         pipe(
           this.board,
           filter(
@@ -127,25 +141,27 @@ export class GameBoardView extends View<GameBoard> {
             board.redraw();
           }),
         );
-        return board;
+        return boards;
       }),
-      each((board) => {
-        if (board.data.char === this.targetWord[board.data.index % 5]) {
-          board.setBoardItem(board.data.char, "correct");
-        } else if (this.targetWord.includes(board.data.char)) {
-          board.setBoardItem(board.data.char, "include");
-        } else {
-          board.setBoardItem(board.data.char, "incorrect");
-        }
-        board.redraw();
-      }),
+      map((board) => board.data.char),
+      reduce((prevChar, curChar) => `${prevChar}${curChar}`),
     );
+
+    if (word === this.targetWord) {
+      this.winGame();
+    }
+
+    if (this.tryCnt >= 6) {
+      this.looseGame();
+    }
+  }
+
+  private getRandomWord() {
+    return words[Math.floor(Math.random() * words.length)];
   }
 
   private getWord() {
-    const targetWord =
-      localStorage.getItem("marpple-wordle") ||
-      words[Math.floor(Math.random() * words.length)];
+    const targetWord = this.getRandomWord();
 
     localStorage.setItem("marpple-wordle", targetWord);
     this.targetWord = targetWord;
