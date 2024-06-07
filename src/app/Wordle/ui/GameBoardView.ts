@@ -10,7 +10,6 @@ import {
   throwIf,
   toArray,
 } from "@fxts/core";
-import { WORDS } from "../const/const";
 import { GameBoardItem, GameBoardItemView } from "./GameBoardItemView";
 import { KeyboardSelected } from "./GameKeyboardItemView";
 import { GameKeyboardView } from "./GameKeyboardView";
@@ -35,8 +34,7 @@ export type GameBoard = {};
 export class GameBoardView extends View<GameBoard> {
   tryCnt: number = 0;
   currentIndex: number = 0;
-  targetWord: string =
-    localStorage.getItem("marpple__wordle") || this.getRandomWord();
+  targetWord: string = localStorage.getItem("marpple__wordle") || "";
   gameBoardItemViews = createGameBoard();
   gameKeyboardView: GameKeyboardView = new GameKeyboardView({});
 
@@ -44,7 +42,6 @@ export class GameBoardView extends View<GameBoard> {
     return html`
       <div class="wordle__container">
         <div class="wordle__game">${this.gameBoardItemViews}</div>
-
         <div id="keyboard">${this.gameKeyboardView}</div>
       </div>
     `;
@@ -73,6 +70,12 @@ export class GameBoardView extends View<GameBoard> {
     });
   }
 
+  protected onMount() {
+    console.log(this.targetWord);
+    if (!this.targetWord) this.getTargetWord();
+    super.onMount();
+  }
+
   private getCurrentBoardItem() {
     return this.gameBoardItemViews[this.currentIndex];
   }
@@ -98,11 +101,12 @@ export class GameBoardView extends View<GameBoard> {
   }
 
   private resetGame() {
-    this.tryCnt = 0;
-    this.currentIndex = 0;
-    this.gameBoardItemViews = createGameBoard();
-    this.getWord();
-    this.redraw();
+    this.getTargetWord().then(() => {
+      this.tryCnt = 0;
+      this.currentIndex = 0;
+      this.gameBoardItemViews = createGameBoard();
+      this.redraw();
+    });
   }
 
   private winGame() {
@@ -176,14 +180,11 @@ export class GameBoardView extends View<GameBoard> {
     }
   }
 
-  private getRandomWord() {
-    return WORDS[Math.floor(Math.random() * WORDS.length)];
-  }
-
-  private getWord() {
-    const targetWord = this.getRandomWord();
-
-    localStorage.setItem("marpple-wordle", targetWord);
-    this.targetWord = targetWord;
+  private async getTargetWord() {
+    const res = await fetch("http://localhost:8080/words/random");
+    const data = await res.json();
+    this.targetWord = data.word_name;
+    localStorage.setItem("marpple__wordle", data.word_name);
+    return this.targetWord;
   }
 }
