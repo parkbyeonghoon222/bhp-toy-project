@@ -24,5 +24,6 @@ export class GameBoardItemView extends View<GameBoardItem> {
   public setBoardItem(char: string, variant: GameBoardItemVariant) {
     this.data.char = char;
     this.data.variant = variant;
+    this.redraw();
   }
 }

@@ -22,18 +22,16 @@ export class GameKeyboardItemView extends View<GameKeyboardItem> {
     </div>`;
   }
 
-  public setKeyboardItem(char: string, variant: GameKeyboardItemVariant) {
-    this.data.char = char;
+  public setKeyboardItem(variant: GameKeyboardItemVariant) {
     this.data.variant = variant;
+    this.redraw();
   }
 
   override onRender() {
-    this.addEventListener("click", (e) => {
-      this._click(e);
-    });
+    this.addEventListener("click", this._click);
   }
 
-  private _click(e: MouseEvent) {
+  private _click() {
     this.dispatchEvent(KeyboardSelected, { detail: this.data, bubbles: true });
   }
 }

@@ -1,4 +1,4 @@
-export const KEYBOARD = [
+export const KEYBOARD_CHARS = [
   "Q",
   "W",
   "E",

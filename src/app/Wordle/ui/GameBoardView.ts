@@ -11,7 +11,7 @@ import {
   toArray,
 } from "@fxts/core";
 import { WORDS } from "../const/const";
-import { GameBoardItemVariant, GameBoardItemView } from "./GameBoardItemView";
+import { GameBoardItem, GameBoardItemView } from "./GameBoardItemView";
 import { KeyboardSelected } from "./GameKeyboardItemView";
 import { GameKeyboardView } from "./GameKeyboardView";
 
@@ -20,12 +20,13 @@ const createGameBoard = () =>
     range(30),
     map(
       (index) =>
-        new GameBoardItemView({
+        ({
           char: "",
           variant: index < 5 ? "empty" : "disabled",
           index,
-        }),
+        }) as GameBoardItem,
     ),
+    map((itemData) => new GameBoardItemView(itemData)),
     toArray,
   );
 
@@ -36,13 +37,13 @@ export class GameBoardView extends View<GameBoard> {
   currentIndex: number = 0;
   targetWord: string =
     localStorage.getItem("marpple__wordle") || this.getRandomWord();
-  board = createGameBoard();
+  gameBoardItemViews = createGameBoard();
   gameKeyboardView: GameKeyboardView = new GameKeyboardView({});
 
   override template({}: GameBoard) {
     return html`
       <div class="wordle__container">
-        <div class="wordle__game">${this.board}</div>
+        <div class="wordle__game">${this.gameBoardItemViews}</div>
 
         <div id="keyboard">${this.gameKeyboardView}</div>
       </div>
@@ -72,14 +73,13 @@ export class GameBoardView extends View<GameBoard> {
     });
   }
 
-  private setCurrentBoardItem(char: string, variant: GameBoardItemVariant) {
-    this.board[this.currentIndex].setBoardItem(char, variant);
-    this.board[this.currentIndex].redraw();
+  private getCurrentBoardItem() {
+    return this.gameBoardItemViews[this.currentIndex];
   }
 
   private appendBoardItem(char: string) {
     if (this.currentIndex < this.tryCnt * 5 + 5) {
-      this.setCurrentBoardItem(char, "entered");
+      this.getCurrentBoardItem().setBoardItem(char, "entered");
       this.currentIndex =
         this.currentIndex + 1 < this.tryCnt * 5 + 5
           ? this.currentIndex + 1
@@ -89,7 +89,7 @@ export class GameBoardView extends View<GameBoard> {
 
   private removeBoardItem() {
     if (this.currentIndex >= this.tryCnt * 5) {
-      this.setCurrentBoardItem("", "empty");
+      this.getCurrentBoardItem().setBoardItem("", "empty");
       this.currentIndex =
         this.currentIndex - 1 >= this.tryCnt * 5
           ? this.currentIndex - 1
@@ -100,7 +100,7 @@ export class GameBoardView extends View<GameBoard> {
   private resetGame() {
     this.tryCnt = 0;
     this.currentIndex = 0;
-    this.board = createGameBoard();
+    this.gameBoardItemViews = createGameBoard();
     this.getWord();
     this.redraw();
   }
@@ -115,10 +115,10 @@ export class GameBoardView extends View<GameBoard> {
     this.resetGame();
   }
 
-  // todo: 리팩토링 필요
+  // todo: pipe 여러개 쪼개기
   private submitAnswer() {
     const word = pipe(
-      this.board,
+      this.gameBoardItemViews,
       filter(
         (board) =>
           board.data.index < this.tryCnt * 5 + 5 &&
@@ -150,7 +150,7 @@ export class GameBoardView extends View<GameBoard> {
       }),
       tap((boards) => {
         pipe(
-          this.board,
+          this.gameBoardItemViews,
           filter(
             (board) =>
               board.data.index < this.tryCnt * 5 + 5 &&
