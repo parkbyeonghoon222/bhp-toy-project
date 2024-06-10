@@ -1,5 +1,14 @@
 import { html, View } from "rune-ts";
-import { each, filter, map, pipe, range, reduce, toArray } from "@fxts/core";
+import {
+  compact,
+  each,
+  filter,
+  map,
+  pipe,
+  range,
+  reduce,
+  toArray,
+} from "@fxts/core";
 import { GameBoardItem, GameBoardItemView } from "./GameBoardItemView";
 import { KeyboardSelected } from "./GameKeyboardItemView";
 import { GameKeyboardView } from "./GameKeyboardView";
@@ -98,6 +107,7 @@ export class GameBoardView extends View<GameBoard> {
         this.tryCnt = 0;
         this.currentIndex = 0;
         this.gameBoardItemViews = createGameBoard();
+        this.gameKeyboardView.resetKeyboard();
         this.redraw();
       })
       .catch((err) => {
@@ -105,6 +115,7 @@ export class GameBoardView extends View<GameBoard> {
         this.tryCnt = 0;
         this.currentIndex = 0;
         this.gameBoardItemViews = createGameBoard();
+        this.gameKeyboardView.resetKeyboard();
         this.redraw();
       });
   }
@@ -172,6 +183,24 @@ export class GameBoardView extends View<GameBoard> {
     this.currentIndex++;
   }
 
+  private changeKeyboardItemByVariant(
+    variant: "include" | "incorrect" | "correct",
+  ) {
+    pipe(
+      this.gameBoardItemViews,
+      filter((boardItemView) => boardItemView.data.variant === variant),
+      map((boardItemView) =>
+        this.gameKeyboardView.getKeyboardItemViewByChar(
+          boardItemView.data.char,
+        ),
+      ),
+      compact,
+      each((keyboardItemView) => {
+        keyboardItemView.setKeyboardItem(variant);
+      }),
+    );
+  }
+
   private submitAnswer() {
     // 현재 줄의 아이템들 가져오기
     const word = this.getCurrentSubmitWord();
@@ -188,6 +217,11 @@ export class GameBoardView extends View<GameBoard> {
         this.changeCurrentBoardItems();
         this.goNextLine();
         this.changeNextBoardItems();
+
+        // 키보드 색상 변경
+        this.changeKeyboardItemByVariant("include");
+        this.changeKeyboardItemByVariant("correct");
+        this.changeKeyboardItemByVariant("incorrect");
       }
     }
   }

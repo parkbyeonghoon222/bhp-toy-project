@@ -43,5 +43,13 @@ export class GameKeyboardView extends View<GameKeyboard> {
     `;
   }
 
-  override onRender() {}
+  getKeyboardItemViewByChar(char: string) {
+    return this.gameKeyboardItemViews.find(
+      (gameKeyboardItem) => gameKeyboardItem.data.char === char,
+    );
+  }
+
+  resetKeyboard() {
+    this.gameKeyboardItemViews = createGameKeyboard();
+  }
 }

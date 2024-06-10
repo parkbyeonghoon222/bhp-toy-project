@@ -32,7 +32,11 @@ export class StyleView extends View<object> {
 
       #wordle {
         width: 100%;
-        margin: 20px auto;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
 
         & .wordle__container {
           display: flex;
@@ -128,6 +132,11 @@ export class StyleView extends View<object> {
 
             &[data-variant="include"] {
               background: #99e0ff;
+              color: #ffffff;
+            }
+
+            &[data-variant="incorrect"] {
+              background: #6b6b6b;
               color: #ffffff;
             }
 
