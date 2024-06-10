@@ -1,15 +1,5 @@
 import { html, View } from "rune-ts";
-import {
-  each,
-  filter,
-  map,
-  pipe,
-  range,
-  reduce,
-  tap,
-  throwIf,
-  toArray,
-} from "@fxts/core";
+import { each, filter, map, pipe, range, reduce, toArray } from "@fxts/core";
 import { GameBoardItem, GameBoardItemView } from "./GameBoardItemView";
 import { KeyboardSelected } from "./GameKeyboardItemView";
 import { GameKeyboardView } from "./GameKeyboardView";
@@ -119,9 +109,9 @@ export class GameBoardView extends View<GameBoard> {
     this.resetGame();
   }
 
-  // todo: pipe 여러개 쪼개기
   private submitAnswer() {
-    const word = pipe(
+    // 현재 줄의 아이템들 가져오기
+    const submitBoardItems = pipe(
       this.gameBoardItemViews,
       filter(
         (board) =>
@@ -130,53 +120,55 @@ export class GameBoardView extends View<GameBoard> {
           board.data.char,
       ),
       toArray,
-      throwIf((boards) => boards.length !== 5),
-      tap((boards) => {
-        pipe(
-          boards,
-          each((board) => {
-            if (board.data.char === this.targetWord[board.data.index % 5]) {
-              board.setBoardItem(board.data.char, "correct");
-            } else if (this.targetWord.includes(board.data.char)) {
-              board.setBoardItem(board.data.char, "include");
-            } else {
-              board.setBoardItem(board.data.char, "incorrect");
-            }
-            board.redraw();
-          }),
-        );
-        return boards;
-      }),
-      tap((boards) => {
-        this.tryCnt++;
-        this.currentIndex++;
-        return boards;
-      }),
-      tap((boards) => {
-        pipe(
-          this.gameBoardItemViews,
-          filter(
-            (board) =>
-              board.data.index < this.tryCnt * 5 + 5 &&
-              board.data.index >= this.tryCnt * 5,
-          ),
-          each((board) => {
-            board.setBoardItem(board.data.char, "empty");
-            board.redraw();
-          }),
-        );
-        return boards;
-      }),
-      map((board) => board.data.char),
-      reduce((prevChar, curChar) => `${prevChar}${curChar}`),
     );
 
-    if (word === this.targetWord) {
-      this.winGame();
-    }
+    if (submitBoardItems.length === 5) {
+      // 카운트 증가
+      this.tryCnt++;
+      this.currentIndex++;
 
-    if (this.tryCnt >= 6) {
-      this.looseGame();
+      // 현재줄 색깔 변경
+      pipe(
+        submitBoardItems,
+        each((boardItem) => {
+          if (
+            boardItem.data.char === this.targetWord[boardItem.data.index % 5]
+          ) {
+            boardItem.setBoardItem(boardItem.data.char, "correct");
+          } else if (this.targetWord.includes(boardItem.data.char)) {
+            boardItem.setBoardItem(boardItem.data.char, "include");
+          } else {
+            boardItem.setBoardItem(boardItem.data.char, "incorrect");
+          }
+        }),
+      );
+
+      // 다음줄 색깔 변경
+      pipe(
+        this.gameBoardItemViews,
+        filter(
+          (boardItem) =>
+            boardItem.data.index < this.tryCnt * 5 + 5 &&
+            boardItem.data.index >= this.tryCnt * 5,
+        ),
+        each((boardItem) => {
+          boardItem.setBoardItem(boardItem.data.char, "empty");
+        }),
+      );
+
+      // 작성한 word 추출
+      const word = pipe(
+        submitBoardItems,
+        map((board) => board.data.char),
+        reduce((prevChar, curChar) => `${prevChar}${curChar}`),
+      );
+
+      // 게임 승패 판단
+      if (word === this.targetWord) {
+        this.winGame();
+      } else if (this.tryCnt >= 6) {
+        this.looseGame();
+      }
     }
   }
 
