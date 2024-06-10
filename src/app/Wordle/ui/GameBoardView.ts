@@ -109,59 +109,70 @@ export class GameBoardView extends View<GameBoard> {
     this.resetGame();
   }
 
-  private submitAnswer() {
-    // 현재 줄의 아이템들 가져오기
-    const submitBoardItems = pipe(
+  private isCurrentBoardItem = (boardItem: GameBoardItemView) => {
+    return (
+      boardItem.data.index < this.tryCnt * 5 + 5 &&
+      boardItem.data.index >= this.tryCnt * 5
+    );
+  };
+
+  private getCurrentSubmitWord() {
+    return pipe(
+      this.getCurrentBoardItems(),
+      filter((boardItem) => !!boardItem.data.char),
+      map((board) => board.data.char),
+      reduce((prevChar, curChar) => `${prevChar}${curChar}`),
+    );
+  }
+
+  private getCurrentBoardItems() {
+    return pipe(
       this.gameBoardItemViews,
-      filter(
-        (board) =>
-          board.data.index < this.tryCnt * 5 + 5 &&
-          board.data.index >= this.tryCnt * 5 &&
-          board.data.char,
-      ),
+      filter(this.isCurrentBoardItem),
       toArray,
     );
+  }
 
-    if (submitBoardItems.length === 5) {
-      // 카운트 증가
-      this.tryCnt++;
-      this.currentIndex++;
+  private changeCurrentBoardItems() {
+    return pipe(
+      this.getCurrentBoardItems(),
+      each((boardItem) => {
+        if (boardItem.data.char === this.targetWord[boardItem.data.index % 5]) {
+          boardItem.setBoardItem(boardItem.data.char, "correct");
+        } else if (this.targetWord.includes(boardItem.data.char)) {
+          boardItem.setBoardItem(boardItem.data.char, "include");
+        } else {
+          boardItem.setBoardItem(boardItem.data.char, "incorrect");
+        }
+      }),
+    );
+  }
 
+  private changeNextBoardItems() {
+    return pipe(
+      this.getCurrentBoardItems(),
+      each((boardItem) => {
+        boardItem.setBoardItem(boardItem.data.char, "empty");
+      }),
+    );
+  }
+
+  private goNextLine() {
+    this.tryCnt++;
+    this.currentIndex++;
+  }
+
+  private submitAnswer() {
+    // 현재 줄의 아이템들 가져오기
+    const word = this.getCurrentSubmitWord();
+
+    if (word.length === 5) {
       // 현재줄 색깔 변경
-      pipe(
-        submitBoardItems,
-        each((boardItem) => {
-          if (
-            boardItem.data.char === this.targetWord[boardItem.data.index % 5]
-          ) {
-            boardItem.setBoardItem(boardItem.data.char, "correct");
-          } else if (this.targetWord.includes(boardItem.data.char)) {
-            boardItem.setBoardItem(boardItem.data.char, "include");
-          } else {
-            boardItem.setBoardItem(boardItem.data.char, "incorrect");
-          }
-        }),
-      );
-
+      this.changeCurrentBoardItems();
+      // 카운트 증가
+      this.goNextLine();
       // 다음줄 색깔 변경
-      pipe(
-        this.gameBoardItemViews,
-        filter(
-          (boardItem) =>
-            boardItem.data.index < this.tryCnt * 5 + 5 &&
-            boardItem.data.index >= this.tryCnt * 5,
-        ),
-        each((boardItem) => {
-          boardItem.setBoardItem(boardItem.data.char, "empty");
-        }),
-      );
-
-      // 작성한 word 추출
-      const word = pipe(
-        submitBoardItems,
-        map((board) => board.data.char),
-        reduce((prevChar, curChar) => `${prevChar}${curChar}`),
-      );
+      this.changeNextBoardItems();
 
       // 게임 승패 판단
       if (word === this.targetWord) {
