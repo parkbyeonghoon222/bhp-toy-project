@@ -37,7 +37,6 @@ export class GameBoardView extends View<GameBoard> {
     `;
   }
 
-  // todo: 함수형으로 바꿔보자
   override onRender() {
     window.addEventListener("keydown", (e: KeyboardEvent) => {
       if (e.code.includes("Key")) {
@@ -61,8 +60,11 @@ export class GameBoardView extends View<GameBoard> {
   }
 
   protected onMount() {
-    console.log(this.targetWord);
-    if (!this.targetWord) this.getTargetWord();
+    if (!this.targetWord) {
+      this.getTargetWord().catch((err) => {
+        this.targetWord = "ERROR";
+      });
+    }
     super.onMount();
   }
 
@@ -91,12 +93,20 @@ export class GameBoardView extends View<GameBoard> {
   }
 
   private resetGame() {
-    this.getTargetWord().then(() => {
-      this.tryCnt = 0;
-      this.currentIndex = 0;
-      this.gameBoardItemViews = createGameBoard();
-      this.redraw();
-    });
+    this.getTargetWord()
+      .then(() => {
+        this.tryCnt = 0;
+        this.currentIndex = 0;
+        this.gameBoardItemViews = createGameBoard();
+        this.redraw();
+      })
+      .catch((err) => {
+        this.targetWord = "ERROR";
+        this.tryCnt = 0;
+        this.currentIndex = 0;
+        this.gameBoardItemViews = createGameBoard();
+        this.redraw();
+      });
   }
 
   private winGame() {
@@ -167,18 +177,17 @@ export class GameBoardView extends View<GameBoard> {
     const word = this.getCurrentSubmitWord();
 
     if (word.length === 5) {
-      // 현재줄 색깔 변경
-      this.changeCurrentBoardItems();
-      // 카운트 증가
-      this.goNextLine();
-      // 다음줄 색깔 변경
-      this.changeNextBoardItems();
-
       // 게임 승패 판단
       if (word === this.targetWord) {
         this.winGame();
-      } else if (this.tryCnt >= 6) {
+      } else if (this.tryCnt === 5) {
         this.looseGame();
+      }
+      // 게임 진행이 계속될 시 현재줄 혹은 다음줄 색깔 변경
+      else {
+        this.changeCurrentBoardItems();
+        this.goNextLine();
+        this.changeNextBoardItems();
       }
     }
   }

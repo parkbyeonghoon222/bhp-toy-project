@@ -121,6 +121,16 @@ export class StyleView extends View<object> {
 
             background-color: #d9d9d9;
 
+            &[data-variant="correct"] {
+              background: #009444;
+              color: #ffffff;
+            }
+
+            &[data-variant="include"] {
+              background: #99e0ff;
+              color: #ffffff;
+            }
+
             &[data-variant="enter"] {
               width: 66px;
             }
