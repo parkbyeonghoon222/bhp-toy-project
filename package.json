@@ -17,6 +17,7 @@
     "@rune-ts/server": "^0.9.17",
     "@types/cors": "^2.8.17",
     "animejs": "^3.2.2",
+    "axios": "^1.7.2",
     "cors": "^2.8.5",
     "prettier": "^3.3.0",
     "rune-ts": "^0.8.8",

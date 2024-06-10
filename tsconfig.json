@@ -10,7 +10,11 @@
       "ES2018",
       "dom"
     ],
-    "rootDir": "src",
-    "moduleResolution": "node"
+    "rootDir": ".",
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "defaultCss": ["common/style/base"]
+    }
   }
 }
