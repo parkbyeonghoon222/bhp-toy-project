@@ -1,4 +1,6 @@
 section.clothes__content {
-
-
+  width: 1080px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  gap: 20px;
 }

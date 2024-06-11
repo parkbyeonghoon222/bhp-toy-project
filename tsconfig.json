@@ -13,8 +13,7 @@
     "rootDir": ".",
     "moduleResolution": "node",
     "baseUrl": ".",
-    "paths": {
-      "defaultCss": ["common/style/base"]
-    }
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   }
 }

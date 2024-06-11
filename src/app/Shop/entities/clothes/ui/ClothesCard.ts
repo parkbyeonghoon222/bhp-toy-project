@@ -1,12 +1,33 @@
-import { html, Page } from "rune-ts";
-import "./clothesFilter.scss";
+import { html, View } from "rune-ts";
+import "./clothesCard.scss";
 
-export type ClothesFilter = Record<string, string>;
+export type ClothesCard = {
+  imageUrl: string;
+  category: string;
+  title: string;
+  price: string;
+  imageAlt?: string;
+};
 
-export class ShopFilterView extends Page<ClothesFilter> {
-  override template() {
+export class ClothesCardView extends View<ClothesCard> {
+  constructor({ imageAlt = "이미지", ...data }: ClothesCard) {
+    super({ ...data, imageAlt });
+  }
+
+  override template({
+    imageUrl,
+    category,
+    title,
+    price,
+    imageAlt,
+  }: ClothesCard) {
     return html`
-      <div class="clothes__filter">아우터를 인기순으로 보여줘</div>
+      <div class="clothes__card">
+        <div class="image"><img src="${imageUrl}" alt="${imageAlt}" /></div>
+        <div class="category">${category}</div>
+        <div class="title">${title}</div>
+        <div class="price">${price}</div>
+      </div>
     `;
   }
 }
