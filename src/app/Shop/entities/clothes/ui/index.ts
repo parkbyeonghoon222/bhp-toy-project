@@ -1,2 +1,2 @@
-export * from "./ShopContent";
-export * from "./ShopFilter";
+export * from "./ClothesContent";
+export * from "./ClothesFilter";

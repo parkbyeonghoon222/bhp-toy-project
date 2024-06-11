@@ -5,7 +5,7 @@ import { Cloth } from "../model";
 const BASE_URL = "/clothes";
 
 export type GetClothesParams = {
-  sortDesc?: "ASC" | "DESC";
+  order?: "ASC" | "DESC";
   sortColumn?: "year";
 };
 
