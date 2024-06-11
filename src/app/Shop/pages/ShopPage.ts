@@ -1,6 +1,7 @@
 import { html, Page } from "rune-ts";
-import { ShopFilterView } from "../entities/clothes/ui/ShopFilter";
-import { ShopContentView } from "../entities/clothes/ui/ShopContent";
+import { ShopContentView, ShopFilterView } from "../entities/clothes/ui";
+import { HeaderView } from "../widgets/header/ui";
+import { FooterView } from "../widgets/footer/ui";
 
 import "./shopPage.scss";
 
@@ -10,7 +11,8 @@ export class ShopPage extends Page<Shop> {
   override template() {
     return html`
       <div id="shop__main">
-        ${new ShopFilterView({})} ${new ShopContentView({})}
+        ${new HeaderView({})} ${new ShopFilterView({})}
+        ${new ShopContentView({})}${new FooterView({})}
       </div>
     `;
   }
