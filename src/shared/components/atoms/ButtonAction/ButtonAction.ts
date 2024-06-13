@@ -1,7 +1,7 @@
-import { html, type Html, View } from 'rune-ts';
+import { html, type Html, View } from "rune-ts";
 
-import style from './ButtonAction.module.scss';
-import { typo } from '../../../../common/typo';
+import style from "./ButtonAction.module.scss";
+import { typo } from "../../../common/typo";
 
 const typeOptions = Object.freeze({
   lightBlue: style.type_lightblue,
@@ -11,9 +11,9 @@ const typeOptions = Object.freeze({
 });
 
 const sizeOptions = Object.freeze({
-  regular: `${style.size_regular} ${typo('14_bold')}`,
-  medium: `${style.size_medium} ${typo('14_bold')}`,
-  large: `${style.size_large} ${typo('16_bold')}`,
+  regular: `${style.size_regular} ${typo("14_bold")}`,
+  medium: `${style.size_medium} ${typo("14_bold")}`,
+  large: `${style.size_large} ${typo("16_bold")}`,
 });
 
 export interface ButtonActionProps {

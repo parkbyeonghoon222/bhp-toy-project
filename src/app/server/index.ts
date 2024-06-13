@@ -58,6 +58,9 @@ server.get(ClientRouter["/"].toString(), (req, res) => {
     head: {
       title: "wordle",
       description: "박병훈의 wordle 게임입니다.",
+      link_tags: [
+        { href: "https://unpkg.com/sanitize.css", rel: "stylesheet" },
+      ],
     },
   };
 

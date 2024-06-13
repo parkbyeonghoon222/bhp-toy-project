@@ -1,7 +1,7 @@
-import { html, View } from 'rune-ts';
+import { html, View } from "rune-ts";
 
-import style from './ButtonSizeFixed.module.scss';
-import { typo } from '../../../../common/typo';
+import style from "./ButtonSizeFixed.module.scss";
+import { typo } from "../../../common/typo";
 
 const typeOptions = Object.freeze({
   white: style.type_white,
@@ -27,7 +27,9 @@ export class ButtonSizeFixed extends View<ButtonSizeFixedProps> {
   override template() {
     return html`
       <button
-        class="${typo('16_medium')} ${style.fixed_size_button} ${this.getTypeOption()}"
+        class="${typo(
+          "16_medium",
+        )} ${style.fixed_size_button} ${this.getTypeOption()}"
         type="button"
       >
         <span>${this.data.label}</span>

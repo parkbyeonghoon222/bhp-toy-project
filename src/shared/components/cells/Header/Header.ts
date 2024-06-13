@@ -3,7 +3,7 @@ import klass from "./Header.module.scss";
 import { HeaderSearchBar } from "../HeaderSearchBar/HeaderSearchBar";
 import { htmlIf } from "../../../shared/lib/utls";
 import { type AnchorTarget } from "../../../app/Shop/shared/type/global";
-import { getTypoRaw } from "../../../../common/typography";
+import { getTypoRaw } from "../../../common/typography";
 import {
   CartFillIcon,
   HeartFillIcon,

@@ -1,7 +1,7 @@
-import { html, View } from 'rune-ts';
+import { html, View } from "rune-ts";
 
-import style from './ButtonOutline.module.scss';
-import { typo } from '../../../../common/typo';
+import style from "./ButtonOutline.module.scss";
+import { typo } from "../../../common/typo";
 
 export interface ButtonOutlineProps {
   label: string;
@@ -16,9 +16,10 @@ export class ButtonOutline extends View<ButtonOutlineProps> {
   override template() {
     return html`
       <button
-        class="${typo('14_medium')} ${style.button_outline} ${this.data.is_selected
+        class="${typo("14_medium")} ${style.button_outline} ${this.data
+          .is_selected
           ? style.is_selected
-          : ''}"
+          : ""}"
         type="button"
       >
         <span>${this.data.label}</span>

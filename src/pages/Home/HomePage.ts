@@ -1,10 +1,10 @@
 import { html, View } from "rune-ts";
-
-export type Home = {};
+import "./homePage.scss";
+import { HomeLoginView } from "../../entities/home/ui";
 
 export class HomePage extends View {
-  override template({}: Home) {
-    return html` <div></div> `;
+  override template() {
+    return html` <div>${new HomeLoginView()}</div> `;
   }
 
   override onRender() {

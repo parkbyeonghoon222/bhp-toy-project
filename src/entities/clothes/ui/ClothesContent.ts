@@ -4,14 +4,8 @@ import { ClothesCardView } from "./ClothesCard";
 import { map, pipe, toArray } from "@fxts/core";
 import { Cloth } from "../model";
 
-export type ClothesContent = {};
-
-export class ClothesContentView extends View<ClothesContent> {
+export class ClothesContentView extends View {
   clothesCardViews?: ClothesCardView[] = [];
-
-  constructor() {
-    super({});
-  }
 
   override template() {
     return html`

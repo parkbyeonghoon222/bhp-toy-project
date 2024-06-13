@@ -1,6 +1,6 @@
 import { $, html, on, View } from "rune-ts";
 import bannerClass from "./MainBanner.module.scss";
-import { staticTypo, typo } from "../../../../common/typo";
+import { staticTypo, typo } from "../../../common/typo";
 import {
   ButtonAction,
   type ButtonActionProps,
