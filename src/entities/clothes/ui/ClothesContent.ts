@@ -2,7 +2,7 @@ import { html, View } from "rune-ts";
 import "./clothesContent.scss";
 import { ClothesCardView } from "./ClothesCard";
 import { map, pipe, toArray } from "@fxts/core";
-import { Cloth } from "../model";
+import { Cloth } from "../types";
 
 export class ClothesContentView extends View {
   clothesCardViews?: ClothesCardView[] = [];

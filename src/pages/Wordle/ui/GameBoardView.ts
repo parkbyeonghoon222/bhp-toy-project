@@ -227,7 +227,7 @@ export class GameBoardView extends View<GameBoard> {
   }
 
   private async getTargetWord() {
-    const res = await fetch("http://localhost:8080/words/random");
+    const res = await fetch("http://localhost:8080/api/words/random");
     const data = await res.json();
     this.targetWord = data.word_name;
     localStorage.setItem("marpple__wordle", data.word_name);

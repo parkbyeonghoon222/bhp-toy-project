@@ -5,10 +5,10 @@ import {
 } from "../../entities/clothes/ui";
 import { HeaderView } from "../../widgets/header/ui";
 import { FooterView } from "../../widgets/footer/ui";
-import { ClothesController } from "../../entities/clothes/model/ClothesController";
+import { ClothesController } from "../../entities/clothes/controller";
 
 import "./shopPage.scss";
-import { Cloth } from "../../entities/clothes/model";
+import { Cloth } from "../../entities/clothes/types";
 
 export type Shop = {
   clothes: Cloth[];
@@ -16,7 +16,7 @@ export type Shop = {
 
 export class ShopPage extends Page<Shop> {
   private _clothesController = new ClothesController(
-    new ClothesContentView(),
+    new ClothesContentView({}),
     new ClothesFilterView(),
   );
 

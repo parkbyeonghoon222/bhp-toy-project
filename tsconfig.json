@@ -14,6 +14,7 @@
     "moduleResolution": "node",
     "baseUrl": ".",
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "downlevelIteration": true
   }
 }

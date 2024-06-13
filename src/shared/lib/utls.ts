@@ -40,3 +40,16 @@ export const changeUrlLang = (url: string, lang: Lang) => {
 export const ptr = (size: number) => {
   return size / 16 + "rem";
 };
+
+export const validateEmail = (email: string) => {
+  // 이메일 형식에 대한 정규식
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return !!email && emailRegex.test(email);
+};
+
+export const validatePassword = (password: string) => {
+  // 비밀번호 형식에 대한 정규식
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  return !!password && passwordRegex.test(password);
+};

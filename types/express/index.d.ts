@@ -1,4 +1,4 @@
-import { IUser } from "../../src/entities/user/model/userModel";
+import { IUser } from "../../src/entities/user/types/userModel";
 
 declare global {
   namespace Express {

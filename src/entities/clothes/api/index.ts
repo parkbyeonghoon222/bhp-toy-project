@@ -1,8 +1,8 @@
 import { apiInstance } from "../../../shared";
 import { AxiosPromise } from "axios";
-import { Cloth } from "../model";
+import { Cloth } from "../types";
 
-const BASE_URL = "/clothes";
+const BASE_URL = "/api/clothes";
 
 export type GetClothesParams = {
   order?: "ASC" | "DESC";

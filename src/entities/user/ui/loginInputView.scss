@@ -1,0 +1,13 @@
+input.login__input {
+  max-width: ptr(380);
+  height: ptr(52);
+  padding: ptr(10);
+
+  font-size: ptr(15);
+  font-weight: 400;
+  line-height: ptr(15);
+  border: none;
+  border-radius: ptr(6);
+  color: rgb(12, 39, 61);
+  background-color: rgb(244, 247, 250);
+}
