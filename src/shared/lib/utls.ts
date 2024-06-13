@@ -1,32 +1,32 @@
-import type { Html } from 'rune-ts';
-import { Lang } from '../common/typography';
+import type { Html } from "rune-ts";
+import { Lang } from "../common/typography";
 
 export const classes = (...classes) => {
   return classes
     .map((cls) => {
       const _type = typeof cls;
       const is_array = Array.isArray(cls);
-      if (_type === 'string') return cls;
-      if (_type === 'object' && !is_array) {
+      if (_type === "string") return cls;
+      if (_type === "object" && !is_array) {
         const _cs: string[] = [];
         for (const key in cls) {
           if (cls[key]) {
             _cs.push(key);
           }
         }
-        return _cs.join(' ');
+        return _cs.join(" ");
       }
       if (Array.isArray(cls)) {
-        return cls.join(' ');
+        return cls.join(" ");
       }
 
-      return '';
+      return "";
     })
-    .join(' ');
+    .join(" ");
 };
 
 export const htmlIf = (html: string | Html, condition: boolean) => {
-  return condition ? html : '';
+  return condition ? html : "";
 };
 
 export const changeUrlLang = (url: string, lang: Lang) => {
@@ -38,5 +38,5 @@ export const changeUrlLang = (url: string, lang: Lang) => {
 };
 
 export const ptr = (size: number) => {
-  return size / 16 + 'rem';
+  return size / 16 + "rem";
 };

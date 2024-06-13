@@ -8,10 +8,10 @@ export default {
   hostname: "localhost",
   mode: "render",
   sassOptions: {
-    includePaths: [join(resolve(), "common/style")],
+    includePaths: [join(resolve(), "src/shared/common/style")],
     additionalData: `@import "base";`,
   },
-  clientEntry: "./src/app/index.ts",
-  serverEntry: "./src/server/server.ts",
+  clientEntry: "./src/app",
+  serverEntry: "./src/app/server",
   watchToReloadPaths: ["./src"],
 };

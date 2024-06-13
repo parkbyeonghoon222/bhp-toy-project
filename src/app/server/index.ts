@@ -1,5 +1,5 @@
 import { app, type LayoutData, MetaView } from "@rune-ts/server";
-import { ClientRouter } from "../app/ClientRouter";
+import { ClientRouter } from "../ClientRouter";
 
 const server = app();
 

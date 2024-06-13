@@ -16,7 +16,7 @@ import {
   XIcon,
   YoutubeIcon,
 } from "../../atoms/Icon/icons";
-import { changeUrlLang, htmlIf } from "../../../../shared/utls";
+import { changeUrlLang, htmlIf } from "../../../shared/lib/utls";
 import { MPS_ADDRESS } from "../../../../shared/constants";
 import { getTypoRaw, type Lang } from "../../../../common/typography";
 import { typo } from "../../../../common/typo";
