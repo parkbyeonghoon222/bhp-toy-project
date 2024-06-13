@@ -1,12 +1,15 @@
-import { $, html, on, View } from 'rune-ts';
-import bannerClass from './MainBanner.module.scss';
-import { staticTypo, typo } from '../../../../common/typo';
-import { ButtonAction, type ButtonActionProps } from '../../atoms/ButtonAction/ButtonAction';
-import { arrowIcon } from '../../atoms/Icon/icons';
-import { dataStr } from '../../../shared/lib/dataStr';
-import { SwiperChangeEvent, SwiperView } from '../Swiper/Swiper';
-import { ButtonArrow } from '../../atoms/ButtonArrow/ButtonArrow';
-import anime from 'animejs';
+import { $, html, on, View } from "rune-ts";
+import bannerClass from "./MainBanner.module.scss";
+import { staticTypo, typo } from "../../../../common/typo";
+import {
+  ButtonAction,
+  type ButtonActionProps,
+} from "../../atoms/ButtonAction/ButtonAction";
+import { arrowIcon } from "../../atoms/Icon/icons";
+import { dataStr } from "../../../app/Shop/shared/lib/dataStr";
+import { SwiperChangeEvent, SwiperView } from "../Swiper/Swiper";
+import { ButtonArrow } from "../../atoms/ButtonArrow/ButtonArrow";
+import anime from "animejs";
 
 interface BannerImageData {
   url: string;
@@ -20,7 +23,7 @@ interface BannerInformationData {
   description: string;
   navigate: object;
   href: string;
-  target: '_self' | '_blank';
+  target: "_self" | "_blank";
   button: ButtonActionProps;
 }
 
@@ -46,8 +49,16 @@ class MainBannerInformationView extends View<{
   activateAnime?: anime.AnimeInstance;
 
   override template() {
-    const { category, content_number, title, description, navigate, target, href, button } =
-      this.data.information;
+    const {
+      category,
+      content_number,
+      title,
+      description,
+      navigate,
+      target,
+      href,
+      button,
+    } = this.data.information;
 
     return html`
       <div
@@ -56,9 +67,13 @@ class MainBannerInformationView extends View<{
           : bannerClass.deactivate} ${bannerClass.information}"
       >
         <div class="${bannerClass.contents}">
-          <span class="${staticTypo('unica_16_medium')}">${category} #${content_number}</span>
-          <h3 class="${typo('48_bold')}">${html.preventEscape(title)}</h3>
-          <span class="${typo('16_medium')}">${html.preventEscape(description)}</span>
+          <span class="${staticTypo("unica_16_medium")}"
+            >${category} #${content_number}</span
+          >
+          <h3 class="${typo("48_bold")}">${html.preventEscape(title)}</h3>
+          <span class="${typo("16_medium")}"
+            >${html.preventEscape(description)}</span
+          >
         </div>
         <a
           class="${bannerClass.button}"
@@ -68,7 +83,8 @@ class MainBannerInformationView extends View<{
         >
           ${new ButtonAction({
             ...button,
-            label: html`${button.label} <span class="${bannerClass.arrow}">${arrowIcon}</span>`,
+            label: html`${button.label}
+              <span class="${bannerClass.arrow}">${arrowIcon}</span>`,
           })}
         </a>
       </div>
@@ -92,10 +108,10 @@ class MainBannerInformationView extends View<{
       targets: el,
       opacity: 1,
       duration: 1000,
-      easing: 'easeInOutQuad',
+      easing: "easeInOutQuad",
       complete: () => {
         $(el).addClass(bannerClass.active);
-        el.style.opacity = '';
+        el.style.opacity = "";
       },
     });
   }
@@ -116,7 +132,7 @@ class MainBannerInformationView extends View<{
       targets: el,
       opacity: 0,
       duration: 1000,
-      easing: 'easeInOutQuad',
+      easing: "easeInOutQuad",
       complete: () => {
         $(el).addClass(bannerClass.deactivate).removeClass(bannerClass.active);
       },
@@ -147,18 +163,22 @@ class MainBannerImageView extends View<BannerData> {
 class MainBannerNavigationView extends View<BannerNavigationData> {
   override template() {
     const navigation = this.data;
-    return html`<div class="navigation ${bannerClass.navigation}">
-      ${navigation.prev_enable ? new ButtonArrow({ direction: 'left', type: 'bright' }) : ''}
-      ${navigation.next_enable ? new ButtonArrow({ direction: 'right', type: 'bright' }) : ''}
+    return html` <div class="navigation ${bannerClass.navigation}">
+      ${navigation.prev_enable
+        ? new ButtonArrow({ direction: "left", type: "bright" })
+        : ""}
+      ${navigation.next_enable
+        ? new ButtonArrow({ direction: "right", type: "bright" })
+        : ""}
     </div>`;
   }
 
   protected override onMount() {
-    this.delegate('click', ButtonArrow, (e, targetView) => {
+    this.delegate("click", ButtonArrow, (e, targetView) => {
       this.dispatchEvent(NavigateHandleEvent, {
         bubbles: true,
         detail: {
-          direction: targetView.data.direction === 'left' ? 'prev' : 'next',
+          direction: targetView.data.direction === "left" ? "prev" : "next",
         },
       });
     });
@@ -166,24 +186,12 @@ class MainBannerNavigationView extends View<BannerNavigationData> {
 }
 
 class NavigateHandleEvent extends CustomEvent<{
-  direction: 'prev' | 'next';
+  direction: "prev" | "next";
 }> {}
 
 class MainBannerPaginationView extends View<BannerPaginationData> {
-  protected override template() {
-    const pagination = this.data;
-
-    return html`<div class="pagination ${bannerClass.pagination} ${staticTypo('bebas_16_bold')}">
-      <span class="current_index"> ${this.calcIndex(pagination.current_index)} </span>
-      <div class="${bannerClass.pages}">
-        <div class="progress ${bannerClass.page}" style="width: ${this.calcProgress()}%;"></div>
-      </div>
-      <span> ${this.calcIndex(pagination.max_index)} </span>
-    </div>`;
-  }
-
   calcIndex(index: number) {
-    return `${index + 1 < 10 ? '0' : ''}${index + 1}`;
+    return `${index + 1 < 10 ? "0" : ""}${index + 1}`;
   }
 
   calcProgress() {
@@ -199,14 +207,35 @@ class MainBannerPaginationView extends View<BannerPaginationData> {
   override redraw(): this {
     const pagination = this.data;
     $(this.element())
-      .find('.current_index')
+      .find(".current_index")
       ?.setInnerHtml(this.calcIndex(pagination.current_index));
-    const progress = $(this.element()).find('.progress')?.element();
+    const progress = $(this.element()).find(".progress")?.element();
     if (progress) {
       progress.style.width = `${this.calcProgress()}%`;
     }
 
     return this;
+  }
+
+  protected override template() {
+    const pagination = this.data;
+
+    return html` <div
+      class="pagination ${bannerClass.pagination} ${staticTypo(
+        "bebas_16_bold",
+      )}"
+    >
+      <span class="current_index">
+        ${this.calcIndex(pagination.current_index)}
+      </span>
+      <div class="${bannerClass.pages}">
+        <div
+          class="progress ${bannerClass.page}"
+          style="width: ${this.calcProgress()}%;"
+        ></div>
+      </div>
+      <span> ${this.calcIndex(pagination.max_index)} </span>
+    </div>`;
   }
 }
 
@@ -223,7 +252,10 @@ export class MainBannerView extends View<BannerData[]> {
 
     this.informationViews = data.map(
       (banner, index) =>
-        new MainBannerInformationView({ ...banner, active: index === current_index }),
+        new MainBannerInformationView({
+          ...banner,
+          active: index === current_index,
+        }),
     );
     this.paginationView = new MainBannerPaginationView({
       current_index,
@@ -252,16 +284,6 @@ export class MainBannerView extends View<BannerData[]> {
     );
   }
 
-  protected override template() {
-    return html` <div class="${bannerClass.banner}">
-      ${this.informationViews}
-      <div class="${bannerClass.controller}">
-        ${this.data.length > 1 ? this.paginationView : ''} ${this.navigationView}
-      </div>
-      ${this.swiperView}
-    </div>`;
-  }
-
   @on(SwiperChangeEvent)
   swiperHandler(e: SwiperChangeEvent) {
     const { current_index, previous_index } = e.detail;
@@ -274,5 +296,16 @@ export class MainBannerView extends View<BannerData[]> {
   @on(NavigateHandleEvent)
   navigationHandler(e: NavigateHandleEvent) {
     this.swiperView[e.detail.direction]();
+  }
+
+  protected override template() {
+    return html` <div class="${bannerClass.banner}">
+      ${this.informationViews}
+      <div class="${bannerClass.controller}">
+        ${this.data.length > 1 ? this.paginationView : ""}
+        ${this.navigationView}
+      </div>
+      ${this.swiperView}
+    </div>`;
   }
 }

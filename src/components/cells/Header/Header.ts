@@ -1,10 +1,15 @@
-import { html, View } from 'rune-ts';
-import klass from './Header.module.scss';
-import { HeaderSearchBar } from '../HeaderSearchBar/HeaderSearchBar';
-import { htmlIf } from '../../../../shared/utls';
-import { type AnchorTarget } from '../../../shared/type/global';
-import { getTypoRaw } from '../../../../common/typography';
-import { CartFillIcon, HeartFillIcon, MarppleTextLogo, UserFillIcon } from '../../atoms/Icon/icons';
+import { html, View } from "rune-ts";
+import klass from "./Header.module.scss";
+import { HeaderSearchBar } from "../HeaderSearchBar/HeaderSearchBar";
+import { htmlIf } from "../../../../shared/utls";
+import { type AnchorTarget } from "../../../app/Shop/shared/type/global";
+import { getTypoRaw } from "../../../../common/typography";
+import {
+  CartFillIcon,
+  HeartFillIcon,
+  MarppleTextLogo,
+  UserFillIcon,
+} from "../../atoms/Icon/icons";
 
 export interface Menu {
   name: string;
@@ -44,15 +49,15 @@ export class Header extends View<HeaderData> {
             (menu) =>
               html`<a
                 href="${menu.url}"
-                target="${menu.target || '_self'}"
-                class="${getTypoRaw('unica_16_medium')}"
+                target="${menu.target || "_self"}"
+                class="${getTypoRaw("unica_16_medium")}"
                 >${menu.name}</a
               >`,
           )}
         </div>
         <div class="${klass.search_bar_container}">
           ${new HeaderSearchBar({
-            placeholder: '올해도 여전히 자유로운 새소년 시즌 그리팅',
+            placeholder: "올해도 여전히 자유로운 새소년 시즌 그리팅",
             transparent: this.state.transparent,
           })}
         </div>

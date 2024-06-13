@@ -31,7 +31,7 @@ export class ClothesContentView extends View<ClothesContent> {
         imageUrl: cloth.imageUrl,
         category: cloth.masterCategory,
         title: cloth.productDisplayName,
-        price: cloth.season,
+        year: cloth.year,
       })),
       map((clothData) => new ClothesCardView(clothData)),
       toArray,

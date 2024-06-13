@@ -11,7 +11,7 @@ export default {
     includePaths: [join(resolve(), "common/style")],
     additionalData: `@import "base";`,
   },
-  clientEntry: "./src/app/client.ts",
+  clientEntry: "./src/app/index.ts",
   serverEntry: "./src/server/server.ts",
-  watchToReloadPaths: ["./"],
+  watchToReloadPaths: ["./src"],
 };

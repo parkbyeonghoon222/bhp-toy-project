@@ -21,6 +21,7 @@ div.clothes__card {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    font-size: 15px;
   }
 
   & > div.title {
@@ -36,7 +37,7 @@ div.clothes__card {
     overflow: hidden;
   }
 
-  & > div.price {
+  & > div.year {
     line-height: 1.29;
     letter-spacing: -.3px;
     color: #4e4e4e;

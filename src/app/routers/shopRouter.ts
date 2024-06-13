@@ -1,4 +1,4 @@
-import { ShopPage } from "./pages";
+import { ShopPage } from "../../pages";
 
 export const ShopRouter = {
   ["/shop"]: ShopPage,

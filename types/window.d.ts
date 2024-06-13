@@ -1,4 +1,4 @@
-import { ClientRouter } from '../src/app/ClientRouter';
+import { ClientRouter } from "../src/app/ClientRouter";
 
 export {};
 

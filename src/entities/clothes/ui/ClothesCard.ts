@@ -5,7 +5,7 @@ export type ClothesCard = {
   imageUrl: string;
   category: string;
   title: string;
-  price: string;
+  year: number;
   imageAlt?: string;
 };
 
@@ -18,7 +18,7 @@ export class ClothesCardView extends View<ClothesCard> {
     imageUrl,
     category,
     title,
-    price,
+    year,
     imageAlt,
   }: ClothesCard) {
     return html`
@@ -26,7 +26,7 @@ export class ClothesCardView extends View<ClothesCard> {
         <div class="image"><img src="${imageUrl}" alt="${imageAlt}" /></div>
         <div class="category">${category}</div>
         <div class="title">${title}</div>
-        <div class="price">${price}</div>
+        <div class="year">${year}</div>
       </div>
     `;
   }

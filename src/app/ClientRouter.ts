@@ -1,6 +1,6 @@
 import { createRouter } from "@rune-ts/server";
 import { WordleRouter } from "./Wordle";
-import { ShopRouter } from "./Shop";
+import { ShopRouter } from "./routers";
 import "../../common/style/reset.scss";
 
 export type ClientRouter = typeof WordleRouter & typeof ShopRouter;

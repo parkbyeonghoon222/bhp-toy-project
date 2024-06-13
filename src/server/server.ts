@@ -9,7 +9,7 @@ server.get(ClientRouter["/shop"].toString(), function (req, res) {
       is_mobile: "false",
     },
     head: {
-      title: "shop",
+      title: "Shop",
       description: "크리에이터를 위한 ~ 굿즈.",
       link_tags: [
         { href: "https://unpkg.com/sanitize.css", rel: "stylesheet" },
