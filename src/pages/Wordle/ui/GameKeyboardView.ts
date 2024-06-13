@@ -1,7 +1,7 @@
 import { html, View } from "rune-ts";
 import { map, pipe, toArray } from "@fxts/core";
 import { GameKeyboardItem, GameKeyboardItemView } from "./GameKeyboardItemView";
-import { KEYBOARD_CHARS } from "../const/const";
+import { KEYBOARD_CHARS } from "../../../shared/constants";
 
 export type GameKeyboard = {};
 

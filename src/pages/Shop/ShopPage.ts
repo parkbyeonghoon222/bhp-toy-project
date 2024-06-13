@@ -1,8 +1,11 @@
 import { html, Page } from "rune-ts";
-import { ClothesContentView, ClothesFilterView } from "../entities/clothes/ui";
-import { HeaderView } from "../widgets/header/ui";
-import { FooterView } from "../widgets/footer/ui";
-import { ClothesController } from "../entities/clothes/model/ClothesController";
+import {
+  ClothesContentView,
+  ClothesFilterView,
+} from "../../entities/clothes/ui";
+import { HeaderView } from "../../widgets/header/ui";
+import { FooterView } from "../../widgets/footer/ui";
+import { ClothesController } from "../../entities/clothes/model/ClothesController";
 
 import "./shopPage.scss";
 
