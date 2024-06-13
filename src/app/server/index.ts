@@ -1,9 +1,12 @@
 import { app, type LayoutData, MetaView } from "@rune-ts/server";
 import { ClientRouter } from "../ClientRouter";
+import { getClothes } from "../../entities/clothes/api";
 
 const server = app();
 
-server.get(ClientRouter["/shop"].toString(), function (req, res) {
+server.get(ClientRouter["/shop"].toString(), async function (req, res) {
+  const result = await getClothes();
+
   const layoutData: LayoutData = {
     html: {
       is_mobile: "false",
@@ -21,7 +24,7 @@ server.get(ClientRouter["/shop"].toString(), function (req, res) {
 
   res.send(
     new MetaView(
-      ClientRouter["/shop"]({}, { is_mobile: true }),
+      ClientRouter["/shop"]({ clothes: result.data }, { is_mobile: true }),
       res.locals.layoutData,
     ).toHtml(),
   );

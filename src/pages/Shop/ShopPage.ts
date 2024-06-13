@@ -8,8 +8,11 @@ import { FooterView } from "../../widgets/footer/ui";
 import { ClothesController } from "../../entities/clothes/model/ClothesController";
 
 import "./shopPage.scss";
+import { Cloth } from "../../entities/clothes/model";
 
-export type Shop = {};
+export type Shop = {
+  clothes: Cloth[];
+};
 
 export class ShopPage extends Page<Shop> {
   private _clothesController = new ClothesController(
@@ -27,6 +30,9 @@ export class ShopPage extends Page<Shop> {
   }
 
   override onRender() {
+    this._clothesController.clothesContent.setClothesCardViews(
+      this.data.clothes,
+    );
     document.querySelector("#body")!.append(this.element());
   }
 }
