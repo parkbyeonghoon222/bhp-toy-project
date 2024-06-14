@@ -4,3 +4,7 @@ section.clothes__content {
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   gap: 20px;
 }
+
+.fade__img img {
+  opacity: 0;
+}

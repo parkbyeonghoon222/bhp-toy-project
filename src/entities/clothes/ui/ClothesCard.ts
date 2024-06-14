@@ -7,6 +7,7 @@ export type ClothesCard = {
   title: string;
   year: number;
   imageAlt?: string;
+  className?: string;
 };
 
 export class ClothesCardView extends View<ClothesCard> {
@@ -19,15 +20,36 @@ export class ClothesCardView extends View<ClothesCard> {
     category,
     title,
     year,
-    imageAlt,
+    imageAlt = "",
+    className = "",
   }: ClothesCard) {
     return html`
-      <div class="clothes__card">
-        <div class="image"><img src="${imageUrl}" alt="${imageAlt}" /></div>
+      <div class="clothes__card ${className}">
+        <div class="image">
+          <img src="" lazy-src="${imageUrl}" alt="${imageAlt}" />
+        </div>
         <div class="category">${category}</div>
         <div class="title">${title}</div>
         <div class="year">${year}</div>
       </div>
     `;
   }
+
+  // onLoad = (fn: (e: Event, ele: HTMLElement) => void) => {
+  //   const img = this.element().querySelector("img") as HTMLImageElement;
+  //   img.onload = (e) => {
+  //     console.log("eadsfasf");
+  //     fn(e, this.element());
+  //   };
+  // };
+
+  onLoad = () => {
+    return new Promise<ClothesCardView>((resolve, reject) => {
+      const img = this.element().querySelector("img") as HTMLImageElement;
+      img.onload = () => {
+        resolve(this);
+      };
+      img.src = img.getAttribute("lazy-src") || "";
+    });
+  };
 }
