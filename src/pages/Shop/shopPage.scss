@@ -1,12 +1,10 @@
+html[is_mobile=false] {
+  overflow-y: scroll;
+  font-size: 14px;
+}
+
 #shop__main {
   margin: 0 auto;
-  padding: 0 5.714285714285714rem;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-
   width: 100%;
   min-height: 100vh;
 }

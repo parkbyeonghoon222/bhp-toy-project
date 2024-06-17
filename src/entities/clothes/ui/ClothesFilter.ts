@@ -9,8 +9,6 @@ export class ClothesFilterView extends View<ClothesFilter> {
   }
 
   override template() {
-    return html`
-      <section class="shop__filter">아우터를 인기순으로 보여줘</section>
-    `;
+    return html` <section class="shop__filter"></section> `;
   }
 }

@@ -35,14 +35,6 @@ export class ClothesCardView extends View<ClothesCard> {
     `;
   }
 
-  // onLoad = (fn: (e: Event, ele: HTMLElement) => void) => {
-  //   const img = this.element().querySelector("img") as HTMLImageElement;
-  //   img.onload = (e) => {
-  //     console.log("eadsfasf");
-  //     fn(e, this.element());
-  //   };
-  // };
-
   onLoad = () => {
     return new Promise<ClothesCardView>((resolve, reject) => {
       const img = this.element().querySelector("img") as HTMLImageElement;

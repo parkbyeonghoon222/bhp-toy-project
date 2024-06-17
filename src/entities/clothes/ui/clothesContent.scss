@@ -1,8 +1,12 @@
 section.clothes__content {
-  width: 1120px;
+  width: 100%;
+  max-width: ptr(1440);
+  padding: ptr(15) 0;
+  margin: 0 auto;
+
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  gap: 20px;
+  gap: ptr(15);
 }
 
 .fade__img img {
