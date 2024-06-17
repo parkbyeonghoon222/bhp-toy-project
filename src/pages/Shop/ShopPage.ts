@@ -12,12 +12,13 @@ import { Cloth } from "../../entities/clothes/types";
 
 export type Shop = {
   clothes: Cloth[];
+  count: string;
 };
 
 export class ShopPage extends Page<Shop> {
   private _clothesController = new ClothesController(
     new ClothesContentView({}),
-    new ClothesFilterView(),
+    new ClothesFilterView({ count: this.data.count }),
   );
 
   override template() {

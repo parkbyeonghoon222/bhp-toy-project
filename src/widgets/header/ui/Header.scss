@@ -1,6 +1,6 @@
 #shop__header {
   width: 100%;
-  max-width: ptr(1440);
+  max-width: ptr(1120);
   padding: ptr(15) 0;
   margin: 0 auto;
   display: flex;
@@ -24,7 +24,7 @@
       & > a {
         font-size: ptr(15);
         font-weight: 500;
-        letter-spacing: -.0142857143rem;
+        letter-spacing: ptr(-1);
         line-height: 1.375;
       }
     }
@@ -39,7 +39,7 @@
     & > div.header__search {
       display: flex;
       align-items: center;
-      gap: .8571428571rem;
+      gap: ptr(13);
       border-radius: ptr(8);
       background-color: rgba(20, 20, 20, .05);
       padding: ptr(8) ptr(15);

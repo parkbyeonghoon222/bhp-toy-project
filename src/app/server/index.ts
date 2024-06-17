@@ -1,11 +1,24 @@
 import { app, type LayoutData, MetaView } from "@rune-ts/server";
 import { ClientRouter } from "../ClientRouter";
-import { getClothes } from "../../entities/clothes/api";
+import {
+  getClothes,
+  getClothesCount,
+  GetClothesParams,
+} from "../../entities/clothes/api";
 
 const server = app();
 
 server.get(ClientRouter["/shop"].toString(), async function (req, res) {
-  const result = await getClothes();
+  const queryData = req.query as unknown as GetClothesParams;
+  const result = await getClothes(queryData);
+  const resultData = await Promise.all([
+    getClothes(req.query as unknown as GetClothesParams),
+    getClothesCount(req.query as unknown as GetClothesParams),
+  ]).then((res) => {
+    const clothes = res[0].data;
+    const count = res[1].data;
+    return { clothes, count };
+  });
 
   const layoutData: LayoutData = {
     html: {
@@ -16,6 +29,12 @@ server.get(ClientRouter["/shop"].toString(), async function (req, res) {
       description: "크리에이터를 위한 ~ 굿즈.",
       link_tags: [
         { href: "https://unpkg.com/sanitize.css", rel: "stylesheet" },
+        { href: "https://fonts.googleapis.com", rel: "preconnect" },
+        { href: "https://fonts.gstatic.com", rel: "preconnect" },
+        {
+          href: "https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap",
+          rel: "stylesheet",
+        },
       ],
     },
   };
@@ -24,7 +43,10 @@ server.get(ClientRouter["/shop"].toString(), async function (req, res) {
 
   res.send(
     new MetaView(
-      ClientRouter["/shop"]({ clothes: result.data }, { is_mobile: true }),
+      ClientRouter["/shop"](
+        { clothes: resultData.clothes, count: resultData.count },
+        { is_mobile: true },
+      ),
       res.locals.layoutData,
     ).toHtml(),
   );

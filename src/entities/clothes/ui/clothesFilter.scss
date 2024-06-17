@@ -1,8 +1,37 @@
 section.shop__filter {
-  line-height: 1.36;
-  letter-spacing: -.2px;
-  color: #111;
-  font-size: 28px;
-  font-weight: 600;
+  width: 100%;
+  max-width: ptr(1120);
+  padding: ptr(15) 0;
+  margin: 0 auto;
 
+  & > div.intro {
+    font-size: ptr(15);
+    font-weight: 500;
+    margin-bottom: ptr(8);
+  }
+
+  & > div.shop__tab {
+    display: flex;
+    gap: ptr(24);
+    margin-bottom: ptr(24);
+
+    [data-active="active"] {
+      color: #000000;
+    }
+
+    & > div {
+      cursor: pointer;
+      font-size: ptr(40);
+      letter-spacing: ptr(-1);
+      font-weight: 500;
+
+      line-height: .9;
+      color: #d9d9d9;
+    }
+  }
+
+  & > div.count {
+    font-size: ptr(15);
+    font-weight: 500;
+  }
 }
