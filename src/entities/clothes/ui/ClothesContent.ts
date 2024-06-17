@@ -5,7 +5,7 @@ import { concurrent, each, map, pipe, toArray, toAsync } from "@fxts/core";
 import { Cloth } from "../types";
 
 export class ClothesContentView extends View {
-  clothesCardViews?: ClothesCardView[] = [];
+  clothesCardViews: ClothesCardView[] = [];
 
   override template() {
     return html`
@@ -15,16 +15,8 @@ export class ClothesContentView extends View {
 
   setClothesCardViews(clothes: Cloth[]) {
     this.clothesCardViews = this._createClothesViews(clothes);
+    this._loadLazyClothesViews(5);
     this.redraw();
-
-    pipe(
-      toAsync(this.clothesCardViews),
-      map((clothesCardView) => clothesCardView.onLoad()),
-      concurrent(10),
-      each((clothesCardView) => {
-        clothesCardView.element().classList.remove("fade__img");
-      }),
-    );
   }
 
   private _createClothesViews(clothes: Cloth[]): ClothesCardView[] {
@@ -42,5 +34,14 @@ export class ClothesContentView extends View {
     );
   }
 
-  private _loadLazyClothesViews(clothes: ClothesCardView[]) {}
+  private _loadLazyClothesViews(lazyCount: number = 10) {
+    pipe(
+      toAsync(this.clothesCardViews),
+      map((clothesCardView) => clothesCardView.onLoad()),
+      concurrent(lazyCount),
+      each((clothesCardView) => {
+        clothesCardView.element().classList.remove("fade__img");
+      }),
+    );
+  }
 }
