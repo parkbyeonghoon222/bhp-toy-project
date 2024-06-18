@@ -10,10 +10,9 @@ const server = app();
 
 server.get(ClientRouter["/shop"].toString(), async function (req, res) {
   const queryData = req.query as unknown as GetClothesParams;
-  const result = await getClothes(queryData);
   const resultData = await Promise.all([
-    getClothes(req.query as unknown as GetClothesParams),
-    getClothesCount(req.query as unknown as GetClothesParams),
+    getClothes(queryData),
+    getClothesCount(queryData),
   ]).then((res) => {
     const clothes = res[0].data;
     const count = res[1].data;
@@ -44,7 +43,7 @@ server.get(ClientRouter["/shop"].toString(), async function (req, res) {
   res.send(
     new MetaView(
       ClientRouter["/shop"](
-        { clothes: resultData.clothes, count: resultData.count },
+        { clothes: resultData.clothes, count: Number(resultData.count) },
         { is_mobile: true },
       ),
       res.locals.layoutData,

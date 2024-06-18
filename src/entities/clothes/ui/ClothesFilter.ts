@@ -1,13 +1,11 @@
 import { html, View } from "rune-ts";
 import "./clothesFilter.scss";
 
-export type ClothesFilter = {
-  count: string;
-};
+export type ClothesFilter = { count: number };
 
 export class ClothesFilterView extends View<ClothesFilter> {
-  constructor(data?: ClothesFilter) {
-    super(data ?? { count: "0" });
+  constructor({ count = 0 }) {
+    super({ count: count });
   }
 
   override template() {
@@ -23,5 +21,10 @@ export class ClothesFilterView extends View<ClothesFilter> {
         <div class="count">총 ${this.data.count}개의 상품</div>
       </section>
     `;
+  }
+
+  setCount(count: number) {
+    this.data.count = count;
+    this.redraw();
   }
 }

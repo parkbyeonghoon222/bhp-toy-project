@@ -4,8 +4,14 @@ import { ClothesCardView } from "./ClothesCard";
 import { concurrent, each, map, pipe, toArray, toAsync } from "@fxts/core";
 import { Cloth } from "../types";
 
-export class ClothesContentView extends View {
-  clothesCardViews: ClothesCardView[] = [];
+export type ClothesContent = {
+  clothes: Cloth[];
+};
+
+export class ClothesContentView extends View<ClothesContent> {
+  clothesCardViews: ClothesCardView[] = this._createClothesViews(
+    this.data.clothes,
+  );
 
   override template() {
     return html`
@@ -13,8 +19,7 @@ export class ClothesContentView extends View {
     `;
   }
 
-  setClothesCardViews(clothes: Cloth[]) {
-    this.clothesCardViews = this._createClothesViews(clothes);
+  protected onRender() {
     this._loadLazyClothesViews(5);
     this.redraw();
   }

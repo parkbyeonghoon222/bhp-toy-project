@@ -1,0 +1,19 @@
+.pagination__item {
+  min-width: ptr(32);
+  height: ptr(32);
+  line-height: ptr(32);
+  text-align: center;
+  color: #a2a2a2;
+  cursor: pointer;
+  user-select: none;
+
+  &[data-active="true"] {
+    color: #141414;
+  }
+
+  &:hover {
+    background-color: #f5f5f5;
+    border-radius: ptr(8);
+    backdrop-filter: blur(20px);
+  }
+}

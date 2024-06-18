@@ -1,0 +1,20 @@
+div.pagination {
+  width: 100%;
+  max-width: ptr(1120);
+  padding: ptr(15) 0;
+  margin: ptr(56) auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: ptr(10);
+
+  & > div.pagination__left, > div.pagination__right {
+    font-size: ptr(32);
+    line-height: ptr(32);
+    text-align: center;
+    font-weight: 100;
+    color: #a2a2a2;
+    user-select: none;
+    cursor: pointer;
+  }
+}
