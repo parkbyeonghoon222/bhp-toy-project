@@ -44,6 +44,7 @@
       background-color: rgba(20, 20, 20, .05);
       padding: ptr(8) ptr(15);
       width: ptr(450);
+      height: ptr(40);
 
       & > input.header__input {
         display: inline-block;
@@ -53,16 +54,25 @@
         padding: 0;
         color: #141414;
       }
+
+      & > span.search__icon {
+        height: ptr(24);
+        width: ptr(24);
+        cursor: pointer;
+      }
     }
 
     & > div.header__icons {
       display: flex;
       align-items: center;
-      height: 100%;
       gap: ptr(15);
       margin-left: ptr(10);
+      height: ptr(40);
 
       & > div.header__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         cursor: pointer;
         height: ptr(18);
         width: ptr(18);

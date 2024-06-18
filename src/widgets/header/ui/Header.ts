@@ -1,4 +1,4 @@
-import { html, Page } from "rune-ts";
+import { html, on, Page } from "rune-ts";
 import "./Header.scss";
 import {
   Heart,
@@ -6,10 +6,15 @@ import {
   Profile,
   ShoppingCart,
 } from "../../../shared/svgs";
+import { SearchIcon } from "../../../shared/components/atoms/Icon/icons";
 
-export type Header = Record<string, string>;
+export type Header = {
+  searchValue?: string;
+};
 
 export class HeaderView extends Page<Header> {
+  searchValue: string = "";
+
   override template() {
     return html`
       <header id="shop__header">
@@ -23,7 +28,12 @@ export class HeaderView extends Page<Header> {
         </div>
         <div class="header__right">
           <div class="header__search">
-            <input type="text" class="header__input" />
+            <input
+              type="text"
+              class="header__input"
+              value="${this.searchValue}"
+            />
+            <span class="search__icon">${SearchIcon}</span>
           </div>
           <div class="header__icons">
             <div class="header__icon">${Heart}</div>
@@ -33,5 +43,36 @@ export class HeaderView extends Page<Header> {
         </div>
       </header>
     `;
+  }
+
+  override onRender() {
+    const queryParams = new URLSearchParams(window.location.search);
+    this.searchValue = queryParams.get("search") || "";
+    this.redraw();
+  }
+
+  @on("keypress", "input.header__input")
+  private _searchPage(event: KeyboardEvent) {
+    if (event.key === "Enter") {
+      const searchText = (event.currentTarget as HTMLInputElement).value;
+      this._goPageBySearch(searchText);
+    }
+  }
+
+  @on("click", "span.search__icon")
+  private _searchIcon(event: KeyboardEvent) {
+    const searchText = (
+      this.element().querySelector("input.header__input") as HTMLInputElement
+    ).value;
+    this._goPageBySearch(searchText);
+  }
+
+  private _goPageBySearch(search: string) {
+    if (search) {
+      const queryParams = new URLSearchParams(window.location.search);
+      queryParams.set("search", search);
+      window.location.href =
+        window.location.pathname + "?" + queryParams.toString();
+    }
   }
 }

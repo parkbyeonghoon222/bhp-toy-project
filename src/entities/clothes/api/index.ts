@@ -11,6 +11,7 @@ export type GetClothesParams = {
   masterCategory?: string;
   subCategory?: string;
   articleType?: string;
+  search?: string;
 };
 
 export const getClothes = ({
@@ -20,6 +21,7 @@ export const getClothes = ({
   subCategory,
   masterCategory,
   sortColumn,
+  search,
 }: GetClothesParams): AxiosPromise<Cloth[]> => {
   return apiInstance.get(BASE_URL, {
     params: {
@@ -29,6 +31,7 @@ export const getClothes = ({
       subCategory,
       sortColumn,
       masterCategory,
+      search,
     },
   });
 };
@@ -37,12 +40,14 @@ export const getClothesCount = ({
   subCategory,
   masterCategory,
   sortColumn,
+  search,
 }: GetClothesParams): AxiosPromise<string> => {
   return apiInstance.get(BASE_URL + "/count", {
     params: {
       subCategory,
       sortColumn,
       masterCategory,
+      search,
     },
   });
 };

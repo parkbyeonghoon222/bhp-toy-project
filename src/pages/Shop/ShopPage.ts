@@ -2,6 +2,7 @@ import { html, Page } from "rune-ts";
 import {
   ClothesContentView,
   ClothesFilterView,
+  ClothesTabView,
 } from "../../entities/clothes/ui";
 import { HeaderView } from "../../widgets/header/ui";
 import { FooterView } from "../../widgets/footer/ui";
@@ -19,16 +20,18 @@ export type Shop = {
 export class ShopPage extends Page<Shop> {
   private _clothesController = new ClothesController(
     new ClothesContentView({ clothes: this.data.clothes }),
-    new ClothesFilterView({ count: this.data.count }),
+    new ClothesFilterView(),
+    new ClothesTabView({ count: this.data.count }),
     new PaginationView({ count: this.data.count }),
   );
 
   override template() {
     return html`
       <div id="shop__main">
-        ${new HeaderView({})} ${this._clothesController.clothesFilter}
+        ${new HeaderView({})} ${this._clothesController.clothesTab}
         ${this._clothesController.clothesContent}
-        ${this._clothesController.paginationView} ${new FooterView({})}
+        ${this._clothesController.paginationView}
+        ${this._clothesController.clothesFilter}${new FooterView({})}
       </div>
     `;
   }
