@@ -1,6 +1,10 @@
-import type { View } from "rune-ts";
-import { ClothesContentView, ClothesFilterView, ClothesTabView } from "../ui";
-import { getClothes, GetClothesParams } from "../api";
+import { View } from "rune-ts";
+import {
+  ClothesContentView,
+  ClothesFilterView,
+  ClothesModalView,
+  ClothesTabView,
+} from "../ui";
 import { PaginationView } from "../../../shared/components/molecule/Pagination/Pagination";
 
 export class ClothesController<T extends object, IV extends View<T>> {
@@ -9,10 +13,6 @@ export class ClothesController<T extends object, IV extends View<T>> {
     public clothesFilter: ClothesFilterView,
     public clothesTab: ClothesTabView,
     public paginationView: PaginationView,
+    public clothesModalView: ClothesModalView,
   ) {}
-
-  private async _setClothesAsync(params: GetClothesParams) {
-    const result = await getClothes(params);
-    return result.data;
-  }
 }

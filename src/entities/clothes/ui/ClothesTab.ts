@@ -10,9 +10,9 @@ export class ClothesTabView extends View<ClothesTab> {
 
   override template() {
     return html`
-      <section class="shop__filter">
+      <section class="shop__tab">
         <div class="intro">마플샵의 상품들을 소개할게요!</div>
-        <div class="shop__tab">
+        <div class="shop__tab--content">
           <div class="product .font_bebas_40" data-active="active">
             PRODUCTS
           </div>

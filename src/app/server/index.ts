@@ -23,6 +23,13 @@ server.get(ClientRouter["/shop"].toString(), async function (req, res) {
     html: {
       is_mobile: "false",
     },
+    body: {
+      scripts: [
+        {
+          src: "https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.5.6/dialog-polyfill.min.js",
+        },
+      ],
+    },
     head: {
       title: "Shop",
       description: "크리에이터를 위한 ~ 굿즈.",

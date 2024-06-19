@@ -1,0 +1,93 @@
+div.clothes__modal {
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  inset: 0;
+  z-index: 6;
+  display: none;
+
+  &[data-active="true"] {
+    display: flex;
+
+    & > .clothes__modal--backdrop {
+      opacity: 1;
+    }
+  }
+
+  & > .clothes__modal--backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: rgba(20, 20, 20, .6);
+    opacity: 0;
+    transition: opacity .35s;
+  }
+
+  & > .clothes__modal--wrapper {
+    width: ptr(445);
+    border-radius: ptr(16);
+    height: ptr(755);
+    background-color: #ffffff;
+    z-index: 2;
+    overflow: hidden;
+
+    & > div.modal__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: ptr(16) ptr(16) ptr(15);
+      border-bottom: 1px solid #f5f5f5;
+      font-weight: 700;
+      font-size: ptr(16);
+
+      & > span.modal__header--close {
+        cursor: pointer;
+        height: ptr(24);
+        width: ptr(24);
+      }
+    }
+
+    & > div.clothes__modal--content {
+      padding: ptr(16);
+      height: ptr(610);
+      overflow-y: auto;
+
+      & > h3 {
+        color: #6b6b6b;
+        margin-bottom: ptr(8);
+        font-size: ptr(14);
+      }
+
+      & > div.clothes__modal--category {
+        margin-bottom: ptr(24);
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: ptr(8);
+
+        & > button.category__item {
+
+        }
+      }
+
+
+    }
+
+    & > div.modal__bottom {
+      display: flex;
+      width: 100%;
+      height: ptr(89);
+      padding: ptr(16);
+      border-top: 1px solid #f5f5f5;
+      gap: ptr(16);
+
+      & > button:nth-of-type(1) {
+        flex: 2;
+      }
+
+      & > button:nth-of-type(2) {
+        flex: 3;
+      }
+    }
+  }
+}
+

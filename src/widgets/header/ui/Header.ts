@@ -71,6 +71,7 @@ export class HeaderView extends Page<Header> {
     if (search) {
       const queryParams = new URLSearchParams(window.location.search);
       queryParams.set("search", search);
+      queryParams.set("page", "1");
       window.location.href =
         window.location.pathname + "?" + queryParams.toString();
     }

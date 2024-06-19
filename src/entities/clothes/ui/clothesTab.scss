@@ -1,16 +1,16 @@
-section.shop__filter {
+section.shop__tab {
   width: 100%;
   max-width: ptr(1120);
-  padding: ptr(15) 0;
+  padding: ptr(16) 0;
   margin: 0 auto;
 
   & > div.intro {
-    font-size: ptr(15);
+    font-size: ptr(16);
     font-weight: 500;
     margin-bottom: ptr(8);
   }
 
-  & > div.shop__tab {
+  & > div.shop__tab--content {
     display: flex;
     gap: ptr(24);
     margin-bottom: ptr(24);
@@ -31,7 +31,7 @@ section.shop__filter {
   }
 
   & > div.count {
-    font-size: ptr(15);
+    font-size: ptr(16);
     font-weight: 500;
   }
 }

@@ -15,6 +15,7 @@ div.shop__filter {
   z-index: 2;
   gap: ptr(8);
   cursor: pointer;
+  user-select: none;
 
   & > span.shop__filter--icon {
     width: ptr(24);

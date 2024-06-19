@@ -1,7 +1,9 @@
-import { html, Page } from "rune-ts";
+import { html, on, Page } from "rune-ts";
 import {
   ClothesContentView,
   ClothesFilterView,
+  ClothesModalEvent,
+  ClothesModalView,
   ClothesTabView,
 } from "../../entities/clothes/ui";
 import { HeaderView } from "../../widgets/header/ui";
@@ -23,6 +25,7 @@ export class ShopPage extends Page<Shop> {
     new ClothesFilterView(),
     new ClothesTabView({ count: this.data.count }),
     new PaginationView({ count: this.data.count }),
+    new ClothesModalView(),
   );
 
   override template() {
@@ -32,11 +35,17 @@ export class ShopPage extends Page<Shop> {
         ${this._clothesController.clothesContent}
         ${this._clothesController.paginationView}
         ${this._clothesController.clothesFilter}${new FooterView({})}
+        ${this._clothesController.clothesModalView}
       </div>
     `;
   }
 
   override onRender() {
     document.querySelector("#body")!.append(this.element());
+  }
+
+  @on(ClothesModalEvent)
+  private _modalListener() {
+    this._clothesController.clothesModalView.showModal();
   }
 }
