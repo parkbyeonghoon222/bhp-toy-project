@@ -25,7 +25,7 @@ export class ShopPage extends Page<Shop> {
     new ClothesFilterView(),
     new ClothesTabView({ count: this.data.count }),
     new PaginationView({ count: this.data.count }),
-    new ClothesModalView(),
+    new ClothesModalView({}),
   );
 
   override template() {

@@ -26,12 +26,16 @@ class CategoryItem extends ButtonAction {
     this.isSelected = props.isSelected ?? false;
   }
 
-  @on("click")
-  private _setOn() {
+  setOn() {
     this.isSelected = !this.isSelected;
     this.data.type = this.isSelected ? "lightBlue" : "line";
-    this.dispatchEvent(CategoryItemEvent, { detail: this.data, bubbles: true });
     this.redraw();
+  }
+
+  @on("click")
+  private _click() {
+    this.setOn();
+    this.dispatchEvent(CategoryItemEvent, { detail: this.data, bubbles: true });
   }
 }
 
@@ -86,12 +90,13 @@ export class ClothesModalView extends View<ClothesModal> {
   override onRender() {
     this.subCategoryButtons = this._createCategories(
       SUB_CATEGORIES,
-      "subCategories",
+      "subCategory",
     );
     this.articleTypeButtons = this._createCategories(
       ARTICLE_TYPES,
-      "articleTypes",
+      "articleType",
     );
+    this._checkSubmitState();
     this.redraw();
   }
 
@@ -103,27 +108,39 @@ export class ClothesModalView extends View<ClothesModal> {
   @on("click", ".modal__bottom > button:nth-of-type(2)")
   private _gotoPageByFilter() {
     const queryParams = new URLSearchParams(window.location.search);
-    queryParams.delete("articleTypes");
-    queryParams.delete("subCategories");
+    queryParams.delete("articleType");
+    queryParams.delete("subCategory");
     pipe(
       this._getSelectedCategory(this.articleTypeButtons),
       each((value) => {
-        queryParams.set("articleTypes", value);
+        queryParams.set("articleType", value);
       }),
     );
     pipe(
       this._getSelectedCategory(this.subCategoryButtons),
       each((value) => {
-        queryParams.set("subCategories", value);
+        queryParams.set("subCategory", value);
       }),
     );
+    queryParams.set("page", "1");
     window.location.href =
       window.location.pathname + "?" + queryParams.toString();
   }
 
+  @on("click", ".modal__bottom > button:nth-of-type(1)")
+  private _resetFilter() {
+    pipe(
+      concat(this.articleTypeButtons, this.subCategoryButtons),
+      filter((button) => button.isSelected),
+      each((button) => {
+        button.setOn();
+      }),
+    );
+    this._checkSubmitState();
+  }
+
   @on(CategoryItemEvent)
   private _checkSubmitState() {
-    console.log("ASDfasfa");
     const isAbleSubmit = pipe(
       concat(this.articleTypeButtons, this.subCategoryButtons),
       some((button) => button.isSelected),
@@ -136,7 +153,7 @@ export class ClothesModalView extends View<ClothesModal> {
 
   private _createCategories(
     categories: string[],
-    queryName: "articleTypes" | "subCategories",
+    queryName: "articleType" | "subCategory",
   ) {
     const queryParams = new URLSearchParams(window.location.search);
     const querySet = new Set(queryParams.getAll(queryName));

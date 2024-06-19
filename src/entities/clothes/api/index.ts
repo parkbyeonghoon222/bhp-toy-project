@@ -9,8 +9,8 @@ export type GetClothesParams = {
   limit: number;
   sortColumn?: "id" | "year";
   masterCategory?: string;
-  subCategory?: string;
-  articleType?: string;
+  subCategory?: string | string[];
+  articleType?: string | string[];
   search?: string;
 };
 
@@ -37,6 +37,7 @@ export const getClothes = ({
 };
 
 export const getClothesCount = ({
+  articleType,
   subCategory,
   masterCategory,
   sortColumn,
@@ -44,6 +45,7 @@ export const getClothesCount = ({
 }: GetClothesParams): AxiosPromise<string> => {
   return apiInstance.get(BASE_URL + "/count", {
     params: {
+      articleType,
       subCategory,
       sortColumn,
       masterCategory,
