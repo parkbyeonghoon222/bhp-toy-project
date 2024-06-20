@@ -1,12 +1,57 @@
 import { app, type LayoutData, MetaView } from "@rune-ts/server";
 import { ClientRouter } from "../ClientRouter";
 import {
+  getCloth,
   getClothes,
   getClothesCount,
   GetClothesParams,
 } from "../../entities/clothes/api";
 
 const server = app();
+
+const defaultLinks = [
+  { href: "https://unpkg.com/sanitize.css", rel: "stylesheet" },
+  { href: "https://fonts.googleapis.com", rel: "preconnect" },
+  { href: "https://fonts.gstatic.com", rel: "preconnect" },
+  {
+    href: "https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap",
+    rel: "stylesheet",
+  },
+];
+
+server.use("/shop/:id", async function (req, res, next) {
+  const id = req.params.id;
+  console.log(id);
+  if (!id) {
+    // ID가 없는 경우 에러 처리
+    return res.status(400).send("ID is required");
+  }
+  next();
+});
+
+server.get(ClientRouter["/shop/:id"].toString(), async function (req, res) {
+  const { id } = req.params as { id: string };
+  const cloth = await getCloth(Number(id)).then((res) => res.data);
+
+  const layoutData: LayoutData = {
+    html: {
+      is_mobile: "false",
+    },
+    head: {
+      title: "Shop",
+      description: "크리에이터를 위한 ~ 굿즈.",
+      link_tags: defaultLinks,
+    },
+  };
+  res.locals.layoutData = layoutData;
+
+  res.send(
+    new MetaView(
+      ClientRouter["/shop/:id"]({ cloth }, { is_mobile: true }),
+      res.locals.layoutData,
+    ).toHtml(),
+  );
+});
 
 server.get(ClientRouter["/shop"].toString(), async function (req, res) {
   const queryData = req.query as unknown as GetClothesParams;
@@ -18,30 +63,14 @@ server.get(ClientRouter["/shop"].toString(), async function (req, res) {
     const count = res[1].data;
     return { clothes, count };
   });
-
   const layoutData: LayoutData = {
     html: {
       is_mobile: "false",
     },
-    body: {
-      scripts: [
-        {
-          src: "https://cdnjs.cloudflare.com/ajax/libs/dialog-polyfill/0.5.6/dialog-polyfill.min.js",
-        },
-      ],
-    },
     head: {
       title: "Shop",
       description: "크리에이터를 위한 ~ 굿즈.",
-      link_tags: [
-        { href: "https://unpkg.com/sanitize.css", rel: "stylesheet" },
-        { href: "https://fonts.googleapis.com", rel: "preconnect" },
-        { href: "https://fonts.gstatic.com", rel: "preconnect" },
-        {
-          href: "https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap",
-          rel: "stylesheet",
-        },
-      ],
+      link_tags: defaultLinks,
     },
   };
 
@@ -57,6 +86,7 @@ server.get(ClientRouter["/shop"].toString(), async function (req, res) {
     ).toHtml(),
   );
 });
+
 server.get(ClientRouter["/wordle"].toString(), function (req, res) {
   const layoutData: LayoutData = {
     html: {

@@ -1,0 +1,11 @@
+html[is_mobile=false] {
+  overflow-y: scroll;
+  font-size: 14px;
+  font-family: "Oswald", sans-serif;
+}
+
+#shop__main {
+  margin: 0 auto;
+  width: 100%;
+  min-height: 100vh;
+}

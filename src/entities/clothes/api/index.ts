@@ -53,3 +53,7 @@ export const getClothesCount = ({
     },
   });
 };
+
+export const getCloth = (id: number): AxiosPromise<Cloth> => {
+  return apiInstance.get(BASE_URL + `/${id}`);
+};
