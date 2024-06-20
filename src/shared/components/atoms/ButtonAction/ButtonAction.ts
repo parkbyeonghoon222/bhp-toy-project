@@ -18,6 +18,7 @@ const sizeOptions = Object.freeze({
 
 export interface ButtonActionProps {
   label: string | Html;
+  className?: string;
   type?: keyof typeof typeOptions;
   size?: keyof typeof sizeOptions;
 }
@@ -40,10 +41,10 @@ export class ButtonAction extends View<ButtonActionProps> {
     );
   }
 
-  override template() {
+  override template({ className = "" }: ButtonActionProps) {
     return html`
       <button
-        class="${style.action_button} ${this.getTypeOption()} ${this.getSizeOption()}"
+        class="${style.action_button} ${className} ${this.getTypeOption()} ${this.getSizeOption()}"
         type="button"
       >
         ${this.data.label}

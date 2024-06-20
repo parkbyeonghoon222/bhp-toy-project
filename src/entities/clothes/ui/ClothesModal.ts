@@ -157,6 +157,8 @@ export class ClothesModalView extends View<ClothesModal> {
     );
     this.submitButton.data.type = isAbleSubmit ? "lightBlue" : "disabled";
     this.resetButton.data.type = isAbleSubmit ? "lightBlue" : "disabled";
+    this.resetButton.data.className = isAbleSubmit ? "" : "disabled";
+    this.submitButton.data.className = isAbleSubmit ? "" : "disabled";
     this.submitButton.redraw();
     this.resetButton.redraw();
   }

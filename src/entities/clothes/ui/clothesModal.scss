@@ -87,6 +87,12 @@ div.clothes__modal {
       & > button:nth-of-type(2) {
         flex: 3;
       }
+
+      & > button {
+        &.disabled {
+          pointer-events: none;
+        }
+      }
     }
   }
 }
