@@ -100,6 +100,19 @@ export class ClothesModalView extends View<ClothesModal> {
     this.redraw();
   }
 
+  private _deleteQueryFromUrl() {
+    const queryParams = new URLSearchParams(window.location.search);
+    queryParams.delete("articleType");
+    queryParams.delete("subCategory");
+    return queryParams;
+  }
+
+  private _gotoInitPage(queryParams: URLSearchParams) {
+    queryParams.set("page", "1");
+    window.location.href =
+      window.location.pathname + "?" + queryParams.toString();
+  }
+
   @on("click", ".clothes__modal--backdrop, .modal__header--close")
   private _clickClose() {
     this.showModal();
@@ -107,24 +120,20 @@ export class ClothesModalView extends View<ClothesModal> {
 
   @on("click", ".modal__bottom > button:nth-of-type(2)")
   private _gotoPageByFilter() {
-    const queryParams = new URLSearchParams(window.location.search);
-    queryParams.delete("articleType");
-    queryParams.delete("subCategory");
+    const queryParams = this._deleteQueryFromUrl();
     pipe(
       this._getSelectedCategory(this.articleTypeButtons),
       each((value) => {
-        queryParams.set("articleType", value);
+        queryParams.append("articleType", value);
       }),
     );
     pipe(
       this._getSelectedCategory(this.subCategoryButtons),
       each((value) => {
-        queryParams.set("subCategory", value);
+        queryParams.append("subCategory", value);
       }),
     );
-    queryParams.set("page", "1");
-    window.location.href =
-      window.location.pathname + "?" + queryParams.toString();
+    this._gotoInitPage(queryParams);
   }
 
   @on("click", ".modal__bottom > button:nth-of-type(1)")
@@ -137,6 +146,7 @@ export class ClothesModalView extends View<ClothesModal> {
       }),
     );
     this._checkSubmitState();
+    this._gotoInitPage(this._deleteQueryFromUrl());
   }
 
   @on(CategoryItemEvent)
