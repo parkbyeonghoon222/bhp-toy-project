@@ -1,6 +1,7 @@
 div.clothes__card {
   width: ptr(210);
   height: ptr(300);
+  cursor: pointer;
 
   & > div.image {
     margin-bottom: ptr(10);

@@ -28,6 +28,7 @@ export class ClothesContentView extends View<ClothesContent> {
     return pipe(
       clothes,
       map((cloth) => ({
+        id: cloth.id,
         imageUrl: cloth.imageUrl,
         category: cloth.masterCategory,
         title: cloth.productDisplayName,

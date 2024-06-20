@@ -1,7 +1,8 @@
-import { html, View } from "rune-ts";
+import { html, on, View } from "rune-ts";
 import "./clothesCard.scss";
 
 export type ClothesCard = {
+  id: number;
   imageUrl: string;
   category: string;
   title: string;
@@ -44,4 +45,9 @@ export class ClothesCardView extends View<ClothesCard> {
       img.src = img.getAttribute("lazy-src") || "";
     });
   };
+
+  @on("click")
+  private _clickCard() {
+    window.location.href = window.location.origin + `/shop/${this.data.id}`;
+  }
 }

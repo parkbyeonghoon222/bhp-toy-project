@@ -19,16 +19,6 @@ const defaultLinks = [
   },
 ];
 
-server.use("/shop/:id", async function (req, res, next) {
-  const id = req.params.id;
-  console.log(id);
-  if (!id) {
-    // ID가 없는 경우 에러 처리
-    return res.status(400).send("ID is required");
-  }
-  next();
-});
-
 server.get(ClientRouter["/shop/:id"].toString(), async function (req, res) {
   const { id } = req.params as { id: string };
   const cloth = await getCloth(Number(id)).then((res) => res.data);
