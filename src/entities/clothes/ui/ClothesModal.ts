@@ -1,4 +1,4 @@
-import { CustomEventWithDetail, html, on, View } from "rune-ts";
+import { CustomEventWithDetail, Enable, html, on, View } from "rune-ts";
 import "./clothesModal.scss";
 import { CloseIcon } from "../../../shared/components/atoms/Icon/icons";
 import {
@@ -39,65 +39,22 @@ class CategoryItem extends ButtonAction {
   }
 }
 
-export class ClothesModalView extends View<ClothesModal> {
-  isActiveModal: boolean = false;
-  subCategoryButtons: CategoryItem[] = [];
-  articleTypeButtons: CategoryItem[] = [];
-  resetButton: ButtonAction = new ButtonAction({
-    label: "초기화",
-    size: "large",
-    type: "disabled",
-  });
-  submitButton: ButtonAction = new ButtonAction({
-    label: "상품 보기",
-    size: "large",
-    type: "disabled",
-  });
-
-  // 모달 구현하고 카테고리 필터 먹이기
-  override template() {
-    return html`
-      <div class="clothes__modal" data-active="${this.isActiveModal}">
-        <div class="clothes__modal--backdrop"></div>
-        <div class="clothes__modal--wrapper">
-          <div class="modal__header">
-            상품 필터<span class="modal__header--close">${CloseIcon}</span>
-          </div>
-          <div class="clothes__modal--content">
-            <h3>상품 분류</h3>
-            <div class="clothes__modal--category">
-              ${this.articleTypeButtons}
-            </div>
-
-            <h3>상품 종류</h3>
-            <div class="clothes__modal--category">
-              ${this.subCategoryButtons}
-            </div>
-          </div>
-          <div class="modal__bottom">
-            ${this.resetButton} ${this.submitButton}
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  showModal() {
-    this.isActiveModal = !this.isActiveModal;
-    this.redraw();
+export class ClothesModalEnable extends Enable {
+  constructor(public override view: ClothesModalView) {
+    super(view);
   }
 
   override onRender() {
-    this.subCategoryButtons = this._createCategories(
+    this.view.subCategoryButtons = this._createCategories(
       SUB_CATEGORIES,
       "subCategory",
     );
-    this.articleTypeButtons = this._createCategories(
+    this.view.articleTypeButtons = this._createCategories(
       ARTICLE_TYPES,
       "articleType",
     );
     this._checkSubmitState();
-    this.redraw();
+    this.view.redraw();
   }
 
   private _deleteQueryFromUrl() {
@@ -115,20 +72,20 @@ export class ClothesModalView extends View<ClothesModal> {
 
   @on("click", ".clothes__modal--backdrop, .modal__header--close")
   private _clickClose() {
-    this.showModal();
+    this.view.showModal();
   }
 
   @on("click", ".modal__bottom > button:nth-of-type(2)")
   private _gotoPageByFilter() {
     const queryParams = this._deleteQueryFromUrl();
     pipe(
-      this._getSelectedCategory(this.articleTypeButtons),
+      this._getSelectedCategory(this.view.articleTypeButtons),
       each((value) => {
         queryParams.append("articleType", value);
       }),
     );
     pipe(
-      this._getSelectedCategory(this.subCategoryButtons),
+      this._getSelectedCategory(this.view.subCategoryButtons),
       each((value) => {
         queryParams.append("subCategory", value);
       }),
@@ -139,7 +96,7 @@ export class ClothesModalView extends View<ClothesModal> {
   @on("click", ".modal__bottom > button:nth-of-type(1)")
   private _resetFilter() {
     pipe(
-      concat(this.articleTypeButtons, this.subCategoryButtons),
+      concat(this.view.articleTypeButtons, this.view.subCategoryButtons),
       filter((button) => button.isSelected),
       each((button) => {
         button.setOn();
@@ -152,15 +109,15 @@ export class ClothesModalView extends View<ClothesModal> {
   @on(CategoryItemEvent)
   private _checkSubmitState() {
     const isAbleSubmit = pipe(
-      concat(this.articleTypeButtons, this.subCategoryButtons),
+      concat(this.view.articleTypeButtons, this.view.subCategoryButtons),
       some((button) => button.isSelected),
     );
-    this.submitButton.data.type = isAbleSubmit ? "lightBlue" : "disabled";
-    this.resetButton.data.type = isAbleSubmit ? "lightBlue" : "disabled";
-    this.resetButton.data.className = isAbleSubmit ? "" : "disabled";
-    this.submitButton.data.className = isAbleSubmit ? "" : "disabled";
-    this.submitButton.redraw();
-    this.resetButton.redraw();
+    this.view.submitButton.data.type = isAbleSubmit ? "lightBlue" : "disabled";
+    this.view.resetButton.data.type = isAbleSubmit ? "lightBlue" : "disabled";
+    this.view.resetButton.data.className = isAbleSubmit ? "" : "disabled";
+    this.view.submitButton.data.className = isAbleSubmit ? "" : "disabled";
+    this.view.submitButton.redraw();
+    this.view.resetButton.redraw();
   }
 
   private _createCategories(
@@ -191,5 +148,55 @@ export class ClothesModalView extends View<ClothesModal> {
       filter((button) => button.isSelected),
       map((button) => String(button.data.label)),
     );
+  }
+}
+
+export class ClothesModalView extends View<ClothesModal> {
+  modalHandler = new ClothesModalEnable(this);
+
+  isActiveModal: boolean = false;
+  subCategoryButtons: CategoryItem[] = [];
+  articleTypeButtons: CategoryItem[] = [];
+  resetButton: ButtonAction = new ButtonAction({
+    label: "초기화",
+    size: "large",
+    type: "disabled",
+  });
+  submitButton: ButtonAction = new ButtonAction({
+    label: "상품 보기",
+    size: "large",
+    type: "disabled",
+  });
+
+  override template() {
+    return html`
+      <div class="clothes__modal" data-active="${this.isActiveModal}">
+        <div class="clothes__modal--backdrop"></div>
+        <div class="clothes__modal--wrapper">
+          <div class="modal__header">
+            상품 필터<span class="modal__header--close">${CloseIcon}</span>
+          </div>
+          <div class="clothes__modal--content">
+            <h3>상품 분류</h3>
+            <div class="clothes__modal--category">
+              ${this.articleTypeButtons}
+            </div>
+
+            <h3>상품 종류</h3>
+            <div class="clothes__modal--category">
+              ${this.subCategoryButtons}
+            </div>
+          </div>
+          <div class="modal__bottom">
+            ${this.resetButton} ${this.submitButton}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  showModal() {
+    this.isActiveModal = !this.isActiveModal;
+    this.redraw();
   }
 }

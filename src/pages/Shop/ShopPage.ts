@@ -1,8 +1,7 @@
-import { html, on, Page } from "rune-ts";
+import { html, Page } from "rune-ts";
 import {
   ClothesContentView,
   ClothesFilterView,
-  ClothesModalEvent,
   ClothesModalView,
   ClothesTabView,
 } from "../../entities/clothes/ui";
@@ -22,7 +21,7 @@ export type Shop = {
 export class ShopPage extends Page<Shop> {
   private _clothesController = new ClothesController(
     new ClothesContentView({ clothes: this.data.clothes }),
-    new ClothesFilterView(),
+    new ClothesFilterView({}),
     new ClothesTabView({ count: this.data.count }),
     new PaginationView({ count: this.data.count }),
     new ClothesModalView({}),
@@ -42,10 +41,5 @@ export class ShopPage extends Page<Shop> {
 
   override onRender() {
     document.querySelector("#body")!.append(this.element());
-  }
-
-  @on(ClothesModalEvent)
-  private _modalListener() {
-    this._clothesController.clothesModalView.showModal();
   }
 }
