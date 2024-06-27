@@ -56,10 +56,12 @@ export const getClothesCount = async (
     ClothesParams,
     "masterCategory" | "subCategory" | "articleType" | "search"
   >,
-): Promise<[{ count: number }]> => {
+): Promise<number> => {
   const whereQuery = createClothesWhereQuery(whereCondition);
 
-  return await QUERY`SELECT COUNT(id) as count FROM byeongpple_shop.cloth ${whereQuery}`;
+  const rows =
+    await QUERY`SELECT COUNT(id) as count FROM byeongpple_shop.cloth ${whereQuery}`;
+  return rows.length ? rows[0].count : 0;
 };
 
 export const getCloth = async (id: number): Promise<[{ count: number }]> => {

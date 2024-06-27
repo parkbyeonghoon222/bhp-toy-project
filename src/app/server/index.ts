@@ -1,11 +1,6 @@
 import { app, type LayoutData, MetaView } from "@rune-ts/server";
 import { ClientRouter } from "../ClientRouter";
-import {
-  getCloth,
-  getClothes,
-  getClothesCount,
-  GetClothesParams,
-} from "../../entities/clothes/api";
+import { getCloth } from "../../entities/clothes/api";
 import { clothesApiRouter } from "../../entities/clothes/api/routes";
 import { createTRPCClient, httpBatchLink } from "@trpc/client";
 import { createContext, mergeRouters } from "./db/trpcConfig";
@@ -66,21 +61,15 @@ server.get(ClientRouter["/shop/:id"].toString(), async function (req, res) {
 });
 
 server.get(ClientRouter["/shop"].toString(), async function (req, res) {
-  const queryData = req.query as unknown as GetClothesParams;
+  const { page = 1, limit = 20, ...restParams } = req.query;
+
+  const count = await client.getClothesCount.query(restParams);
   const clothes = await client.getClothes.query({
-    sortColumn: "id",
-    limit: 20,
-    skip: 0,
+    page: parseInt(page),
+    limit: parseInt(limit),
+    ...restParams,
   });
 
-  const resultData = await Promise.all([
-    getClothes(queryData),
-    getClothesCount(queryData),
-  ]).then((res) => {
-    const clothes = res[0].data;
-    const count = res[1].data;
-    return { clothes, count };
-  });
   const layoutData: LayoutData = {
     html: {
       is_mobile: "false",
@@ -96,10 +85,7 @@ server.get(ClientRouter["/shop"].toString(), async function (req, res) {
 
   res.send(
     new MetaView(
-      ClientRouter["/shop"](
-        { clothes: resultData.clothes, count: Number(resultData.count) },
-        { is_mobile: true },
-      ),
+      ClientRouter["/shop"]({ clothes, count }, { is_mobile: true }),
       res.locals.layoutData,
     ).toHtml(),
   );

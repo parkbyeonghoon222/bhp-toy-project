@@ -40,14 +40,15 @@ export const getClothesCount = ({
   articleType,
   subCategory,
   masterCategory,
-  sortColumn,
   search,
-}: GetClothesParams): AxiosPromise<string> => {
+}: Pick<
+  GetClothesParams,
+  "masterCategory" | "subCategory" | "search" | "articleType"
+>): AxiosPromise<string> => {
   return apiInstance.get(BASE_URL + "/count", {
     params: {
       articleType,
       subCategory,
-      sortColumn,
       masterCategory,
       search,
     },
