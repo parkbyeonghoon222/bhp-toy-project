@@ -24,10 +24,7 @@ export class FilterModalEnable extends Enable {
 }
 
 export class ClothesController<T extends object, IV extends View<T>> {
-  filterModal = new FilterModalEnable(
-    this.clothesFilter,
-    this.clothesModalView,
-  );
+  private filterModal: FilterModalEnable;
 
   constructor(
     public clothesContent: ClothesContentView,
@@ -35,5 +32,10 @@ export class ClothesController<T extends object, IV extends View<T>> {
     public clothesTab: ClothesTabView,
     public paginationView: PaginationView,
     public clothesModalView: ClothesModalView,
-  ) {}
+  ) {
+    this.filterModal = new FilterModalEnable(
+      this.clothesFilter,
+      this.clothesModalView,
+    );
+  }
 }

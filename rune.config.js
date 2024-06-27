@@ -11,7 +11,8 @@ export default {
     includePaths: [join(resolve(), "src/shared/common/style")],
     additionalData: `@import "base";`,
   },
+  envFiles: [".env"],
   clientEntry: "./src/app",
   serverEntry: "./src/app/server",
-  watchToReloadPaths: ["./src"],
+  watchToReloadPaths: ["./rune"],
 };

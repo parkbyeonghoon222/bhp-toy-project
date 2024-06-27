@@ -34,7 +34,6 @@ export class LoginController<T extends object, IV extends View<T>> {
   };
 
   private _loginError = ({ email, password }: User) => {
-    console.log(email, password);
     return Error("에러");
   };
 }

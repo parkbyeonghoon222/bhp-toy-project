@@ -6,8 +6,30 @@ import {
   getClothesCount,
   GetClothesParams,
 } from "../../entities/clothes/api";
+import { clothesApiRouter } from "../../entities/clothes/api/routes";
+import { createTRPCClient, httpBatchLink } from "@trpc/client";
+import { createContext, mergeRouters } from "./db/trpcConfig";
+import * as trpcExpress from "@trpc/server/adapters/express";
 
 const server = app();
+
+const apiRouters = mergeRouters(clothesApiRouter);
+
+const client = createTRPCClient<typeof apiRouters>({
+  links: [
+    httpBatchLink({
+      url: "http://localhost:3000/trpc",
+    }),
+  ],
+});
+
+server.use(
+  "/trpc",
+  trpcExpress.createExpressMiddleware({
+    router: apiRouters,
+    createContext,
+  }),
+);
 
 const defaultLinks = [
   { href: "https://unpkg.com/sanitize.css", rel: "stylesheet" },
@@ -45,6 +67,12 @@ server.get(ClientRouter["/shop/:id"].toString(), async function (req, res) {
 
 server.get(ClientRouter["/shop"].toString(), async function (req, res) {
   const queryData = req.query as unknown as GetClothesParams;
+  const clothes = await client.getClothes.query({
+    sortColumn: "id",
+    limit: 20,
+    skip: 0,
+  });
+
   const resultData = await Promise.all([
     getClothes(queryData),
     getClothesCount(queryData),
@@ -114,10 +142,5 @@ server.get(ClientRouter["/"].toString(), (req, res) => {
 
   res.locals.layoutData = layoutData;
 
-  res.send(
-    new MetaView(
-      ClientRouter["/"]({}, { is_mobile: true }),
-      res.locals.layoutData,
-    ).toHtml(),
-  );
+  res.send(new MetaView(ClientRouter["/"](), res.locals.layoutData).toHtml());
 });

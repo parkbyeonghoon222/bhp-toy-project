@@ -1,20 +1,32 @@
 {
   "compilerOptions": {
-    "strict": true,
-    "module": "commonjs",
-    "jsx": "preserve",
-    "esModuleInterop": true,
-    "sourceMap": true,
-    "allowJs": true,
-    "lib": [
-      "ES2018",
-      "dom"
-    ],
-    "rootDir": ".",
+    "target": "es2022",
+    "module": "es2022",
     "moduleResolution": "node",
-    "baseUrl": ".",
+    "lib": [
+      "es2022",
+      "dom",
+      "dom.iterable"
+    ],
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "typeRoots": [
+      "types",
+      "node_modules/@types"
+    ],
+    "noEmit": true,
+    "noImplicitOverride": true,
+    "preserveSymlinks": true,
+    "noImplicitAny": false,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "downlevelIteration": true
-  }
+    "incremental": true,
+    "skipDefaultLibCheck": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
 }
