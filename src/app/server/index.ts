@@ -1,6 +1,5 @@
 import { app, type LayoutData, MetaView } from "@rune-ts/server";
 import { ClientRouter } from "../ClientRouter";
-import { getCloth } from "../../entities/clothes/api";
 import { clothesApiRouter } from "../../entities/clothes/api/routes";
 import { createTRPCClient, httpBatchLink } from "@trpc/client";
 import { createContext, mergeRouters } from "./db/trpcConfig";
@@ -38,7 +37,7 @@ const defaultLinks = [
 
 server.get(ClientRouter["/shop/:id"].toString(), async function (req, res) {
   const { id } = req.params as { id: string };
-  const cloth = await getCloth(Number(id)).then((res) => res.data);
+  const cloth = await client.getCloth.query(Number(id));
 
   const layoutData: LayoutData = {
     html: {

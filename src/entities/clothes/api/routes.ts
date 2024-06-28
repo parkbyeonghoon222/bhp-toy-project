@@ -1,6 +1,7 @@
 import { publicProcedure, router } from "../../../app/server/db/trpcConfig";
-import { getClothes, getClothesCount } from "./get";
+import { getCloth, getClothes, getClothesCount } from "./get";
 import { GetClothesCountParamsSchema, GetClothesParamsSchema } from "../types";
+import { z } from "zod";
 
 export const clothesApiRouter = router({
   getClothes: publicProcedure
@@ -20,4 +21,7 @@ export const clothesApiRouter = router({
     .query(async (opts) => {
       return await getClothesCount(opts.input);
     }),
+  getCloth: publicProcedure.input(z.number()).query(async (opts) => {
+    return await getCloth(opts.input);
+  }),
 });

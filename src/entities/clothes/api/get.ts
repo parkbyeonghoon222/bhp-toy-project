@@ -64,7 +64,7 @@ export const getClothesCount = async (
   return rows.length ? rows[0].count : 0;
 };
 
-export const getCloth = async (id: number): Promise<[{ count: number }]> => {
+export const getCloth = async (id: number): Promise<Cloth> => {
   const rows =
     await QUERY`SELECT * FROM byeongpple_shop.cloth WHERE id = ${id}`;
   return rows.length > 0 ? changeKeys.camelCase(rows[0]) : null;
