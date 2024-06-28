@@ -1,8 +1,8 @@
 import { html, View } from "rune-ts";
 import "./clothesContent.scss";
-import { ClothesCardView } from "./ClothesCard";
+import { ClothesCardView } from "../ClothesCard";
 import { concurrent, each, map, pipe, toArray, toAsync } from "@fxts/core";
-import { Cloth } from "../types";
+import { Cloth } from "../../types";
 
 export type ClothesContent = {
   clothes: Cloth[];
@@ -19,7 +19,7 @@ export class ClothesContentView extends View<ClothesContent> {
     `;
   }
 
-  protected onRender() {
+  override onRender() {
     this._loadLazyClothesViews(5);
     this.redraw();
   }

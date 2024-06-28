@@ -1,11 +1,11 @@
 import { html, View } from "rune-ts";
 import "./clothesDetailView.scss";
-import { Cloth } from "../types";
-import { ButtonAction } from "../../../shared/components/atoms/ButtonAction/ButtonAction";
+import { Cloth } from "../../types";
+import { ButtonAction } from "../../../../shared/components/atoms/ButtonAction/ButtonAction";
 
 export type ClothesDetail = { cloth: Cloth };
 
-export class ClothesDetailView extends View<ClothesDetail> {
+export class Index extends View<ClothesDetail> {
   buyButton: ButtonAction = new ButtonAction({
     label: "바로 구매하기",
     type: "blue",

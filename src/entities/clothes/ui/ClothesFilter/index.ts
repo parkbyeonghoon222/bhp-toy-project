@@ -1,6 +1,6 @@
 import { html, View } from "rune-ts";
 import "./clothesFilter.scss";
-import { FilterIcon } from "../../../shared/components/atoms/Icon/icons";
+import { FilterIcon } from "../../../../shared/components/atoms/Icon/icons";
 
 export type ClothesFilter = {};
 

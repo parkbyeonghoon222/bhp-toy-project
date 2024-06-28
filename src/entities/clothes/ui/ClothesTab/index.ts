@@ -1,9 +1,9 @@
 import { html, View } from "rune-ts";
 import "./clothesTab.scss";
 
-export type ClothesTab = { count: number };
+export type Index = { count: number };
 
-export class ClothesTabView extends View<ClothesTab> {
+export class ClothesTabView extends View<Index> {
   constructor({ count = 0 }) {
     super({ count: count });
   }

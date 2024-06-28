@@ -1,12 +1,12 @@
 import { CustomEventWithDetail, Enable, html, on, View } from "rune-ts";
 import "./clothesModal.scss";
-import { CloseIcon } from "../../../shared/components/atoms/Icon/icons";
+import { CloseIcon } from "../../../../shared/components/atoms/Icon/icons";
 import {
   ButtonAction,
   ButtonActionProps,
-} from "../../../shared/components/atoms/ButtonAction/ButtonAction";
+} from "../../../../shared/components/atoms/ButtonAction/ButtonAction";
 import { concat, each, filter, map, pipe, some, toArray } from "@fxts/core";
-import { ARTICLE_TYPES, SUB_CATEGORIES } from "../../../shared/constants";
+import { ARTICLE_TYPES, SUB_CATEGORIES } from "../../../../shared/constants";
 
 export type ClothesModal = {};
 
