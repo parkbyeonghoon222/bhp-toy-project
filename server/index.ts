@@ -1,13 +1,14 @@
 import { app, type LayoutData, MetaView } from "@rune-ts/server";
-import { ClientRouter } from "../ClientRouter";
-import { clothesApiRouter } from "../../entities/clothes/api/routes";
-import { createTRPCClient, httpBatchLink } from "@trpc/client";
-import { createContext, mergeRouters } from "./db/trpcConfig";
+import { ClientRouter } from "../src/app/ClientRouter";
+import { createContext, mergeRouters } from "./db";
 import * as trpcExpress from "@trpc/server/adapters/express";
+import { clothesApiRouter } from "../src/entities/clothes/api";
+import { wordleApiRouter } from "../src/entities/wordle/api";
+import { createTRPCClient, httpBatchLink } from "@trpc/client";
+
+export const apiRouters = mergeRouters(clothesApiRouter, wordleApiRouter);
 
 const server = app();
-
-const apiRouters = mergeRouters(clothesApiRouter);
 
 const client = createTRPCClient<typeof apiRouters>({
   links: [
@@ -90,7 +91,9 @@ server.get(ClientRouter["/shop"].toString(), async function (req, res) {
   );
 });
 
-server.get(ClientRouter["/wordle"].toString(), function (req, res) {
+server.get(ClientRouter["/wordle"].toString(), async function (req, res) {
+  const targetWord = await client.getRandomWord.query();
+
   const layoutData: LayoutData = {
     html: {
       is_mobile: "false",
@@ -105,7 +108,7 @@ server.get(ClientRouter["/wordle"].toString(), function (req, res) {
 
   res.send(
     new MetaView(
-      ClientRouter["/wordle"]({}, { is_mobile: true }),
+      ClientRouter["/wordle"]({ targetWord }, { is_mobile: true }),
       res.locals.layoutData,
     ).toHtml(),
   );

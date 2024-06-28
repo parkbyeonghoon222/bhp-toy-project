@@ -32,3 +32,5 @@ export const {
   TRANSACTION,
   END,
 } = POOL;
+
+export * from "./trpcConfig"

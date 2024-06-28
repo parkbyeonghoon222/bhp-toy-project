@@ -13,6 +13,6 @@ export default {
   },
   envFiles: [".env"],
   clientEntry: "./src/app",
-  serverEntry: "./src/app/server",
+  serverEntry: "./server",
   watchToReloadPaths: ["./rune"],
 };
