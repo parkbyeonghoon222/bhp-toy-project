@@ -36,8 +36,7 @@ export type GameBoard = {
 export class GameBoardView extends View<GameBoard> {
   tryCnt: number = 0;
   currentIndex: number = 0;
-  targetWord: string =
-    localStorage.getItem("marpple__wordle") || this.data.targetWord;
+  targetWord: string = this.data.targetWord;
   gameBoardItemViews = createGameBoard();
   gameKeyboardView: GameKeyboardView = new GameKeyboardView({});
 
@@ -51,7 +50,12 @@ export class GameBoardView extends View<GameBoard> {
   }
 
   override onRender() {
-    localStorage.setItem("marpple__wordle", this.targetWord);
+    const localWord = localStorage.getItem("marpple__wordle");
+    if (localWord) {
+      this.targetWord = localWord;
+    } else {
+      localStorage.setItem("marpple__wordle", this.targetWord);
+    }
 
     window.addEventListener("keydown", (e: KeyboardEvent) => {
       if (e.code.includes("Key")) {

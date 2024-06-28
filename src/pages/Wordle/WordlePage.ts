@@ -4,22 +4,20 @@ import { GameBoardView } from "../../entities/wordle/ui/GameBoardView";
 import "./wordlePage.scss";
 
 export class WordlePage extends Page<{ targetWord: string }> {
+  private gameBoardView = new GameBoardView({
+    targetWord: this.data.targetWord,
+  });
+
   override template() {
     return html`
       <main>
-        <section id="wordle"></section>
+        <section id="wordle">${this.gameBoardView}</section>
       </main>
     `;
   }
 
   override onRender() {
     document.querySelector("#body")!.append(this.element());
-
-    document.querySelector("#wordle")!.append(
-      new GameBoardView({
-        targetWord: this.data.targetWord,
-      }).render(),
-    );
     document.querySelector("#body")!.append(new GameManualView({}).render());
   }
 }
