@@ -1,22 +1,10 @@
 import { app, type LayoutData, MetaView } from "@rune-ts/server";
-import { ClientRouter } from "../src/app/ClientRouter";
-import { createContext, mergeRouters } from "./db";
+import { ClientRouter } from "../routers";
+import { apiRouters, createContext } from "../../../server/db";
 import * as trpcExpress from "@trpc/server/adapters/express";
-import { clothesApiRouter } from "../src/entities/clothes/api";
-import { wordleApiRouter } from "../src/entities/wordle/api";
-import { createTRPCClient, httpBatchLink } from "@trpc/client";
-
-export const apiRouters = mergeRouters(clothesApiRouter, wordleApiRouter);
+import { client } from "../../shared";
 
 const server = app();
-
-const client = createTRPCClient<typeof apiRouters>({
-  links: [
-    httpBatchLink({
-      url: "http://localhost:3000/trpc",
-    }),
-  ],
-});
 
 server.use(
   "/trpc",
