@@ -1,8 +1,9 @@
 import { app, type LayoutData, MetaView } from "@rune-ts/server";
 import { ClientRouter } from "../routers";
-import { apiRouters, createContext } from "../../../server/db";
+import { createContext } from "../../../server/db";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { client } from "../../shared";
+import { apiRouters } from "../../../server";
 
 const server = app();
 

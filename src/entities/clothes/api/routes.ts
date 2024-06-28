@@ -1,4 +1,4 @@
-import { publicProcedure, router } from "../../../../server/db/trpcConfig";
+import { publicProcedure, router } from "../../../../server/db";
 import { getCloth, getClothes, getClothesCount } from "./get";
 import { GetClothesCountParamsSchema, GetClothesParamsSchema } from "../types";
 import { z } from "zod";

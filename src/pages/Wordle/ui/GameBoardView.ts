@@ -12,6 +12,7 @@ import {
 import { GameBoardItem, GameBoardItemView } from "./GameBoardItemView";
 import { KeyboardSelected } from "./GameKeyboardItemView";
 import { GameKeyboardView } from "./GameKeyboardView";
+import { client } from "../../../shared";
 
 const createGameBoard = () =>
   pipe(
@@ -223,10 +224,8 @@ export class GameBoardView extends View<GameBoard> {
   }
 
   private async getTargetWord() {
-    const res = await fetch("http://localhost:8080/api/words/random");
-    const data = await res.json();
-    this.targetWord = data.word_name;
-    localStorage.setItem("marpple__wordle", data.word_name);
+    this.targetWord = await client.getRandomWord.query();
+    localStorage.setItem("marpple__wordle", this.targetWord);
     return this.targetWord;
   }
 }

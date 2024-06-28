@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createTRPCClient, httpBatchLink } from "@trpc/client";
-import { ApiRouters } from "../../../server/db";
+import { ApiRouters } from "../../../server";
 
 export const API_URL = "http://localhost:8080";
 
