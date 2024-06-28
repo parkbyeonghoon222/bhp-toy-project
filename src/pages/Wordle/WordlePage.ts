@@ -1,6 +1,6 @@
 import { html, Page } from "rune-ts";
-import { GameManualView } from "./ui/GameManualView";
-import { GameBoardView } from "./ui/GameBoardView";
+import { GameManualView } from "../../entities/wordle/ui/GameManualView";
+import { GameBoardView } from "../../entities/wordle/ui/GameBoardView";
 import "./wordlePage.scss";
 
 export class WordlePage extends Page<{ targetWord: string }> {
