@@ -1,7 +1,7 @@
 import { Cloth, ClothesParams } from "../types";
 import { compact, entries, map, pipe, reduceLazy } from "@fxts/core";
 import { match, P } from "ts-pattern";
-import { EQ, IN, QUERY, SQL } from "../../../app/server/db";
+import { EQ, IN, QUERY, SQL } from "../../../../server/db";
 
 // @ts-ignore
 import * as changeKeys from "change-case/keys";

@@ -3,9 +3,7 @@ import { GameManualView } from "./ui/GameManualView";
 import { GameBoardView } from "./ui/GameBoardView";
 import "./wordlePage.scss";
 
-export type Wordle = Record<string, string>;
-
-export class WordlePage extends Page<Wordle> {
+export class WordlePage extends Page<{ targetWord: string }> {
   override template() {
     return html`
       <main>
@@ -17,7 +15,11 @@ export class WordlePage extends Page<Wordle> {
   override onRender() {
     document.querySelector("#body")!.append(this.element());
 
-    document.querySelector("#wordle")!.append(new GameBoardView({}).render());
+    document.querySelector("#wordle")!.append(
+      new GameBoardView({
+        targetWord: this.data.targetWord,
+      }).render(),
+    );
     document.querySelector("#body")!.append(new GameManualView({}).render());
   }
 }

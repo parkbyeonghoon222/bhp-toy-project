@@ -28,12 +28,15 @@ const createGameBoard = () =>
     toArray,
   );
 
-export type GameBoard = {};
+export type GameBoard = {
+  targetWord: string;
+};
 
 export class GameBoardView extends View<GameBoard> {
   tryCnt: number = 0;
   currentIndex: number = 0;
-  targetWord: string = localStorage.getItem("marpple__wordle") || "";
+  targetWord: string =
+    localStorage.getItem("marpple__wordle") || this.data.targetWord;
   gameBoardItemViews = createGameBoard();
   gameKeyboardView: GameKeyboardView = new GameKeyboardView({});
 
@@ -47,6 +50,8 @@ export class GameBoardView extends View<GameBoard> {
   }
 
   override onRender() {
+    localStorage.setItem("marpple__wordle", this.targetWord);
+
     window.addEventListener("keydown", (e: KeyboardEvent) => {
       if (e.code.includes("Key")) {
         this.appendBoardItem(e.code.replace("Key", ""));
@@ -66,15 +71,6 @@ export class GameBoardView extends View<GameBoard> {
         this.appendBoardItem(e.detail.char);
       }
     });
-  }
-
-  protected onMount() {
-    if (!this.targetWord) {
-      this.getTargetWord().catch((err) => {
-        this.targetWord = "ERROR";
-      });
-    }
-    super.onMount();
   }
 
   private getCurrentBoardItem() {
