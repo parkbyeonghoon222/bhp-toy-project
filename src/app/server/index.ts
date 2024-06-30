@@ -74,7 +74,10 @@ server.get(ClientRouter["/shop"].toString(), async function (req, res) {
 
   res.send(
     new MetaView(
-      ClientRouter["/shop"]({ clothes, count }, { is_mobile: true }),
+      ClientRouter["/shop"](
+        { clothes, count: Number(count) },
+        { is_mobile: true },
+      ),
       res.locals.layoutData,
     ).toHtml(),
   );

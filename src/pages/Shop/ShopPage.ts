@@ -27,12 +27,12 @@ export class ShopPage extends Page<Shop> {
     new ClothesModalView({}),
   );
 
-  override template() {
+  override template({ count }: Shop) {
     return html`
       <div id="shop__main">
         ${new HeaderView({})} ${this._clothesController.clothesTab}
         ${this._clothesController.clothesContent}
-        ${this._clothesController.paginationView}
+        ${count !== 0 ? this._clothesController.paginationView : ""}
         ${this._clothesController.clothesFilter}${new FooterView({})}
         ${this._clothesController.clothesModalView}
       </div>
