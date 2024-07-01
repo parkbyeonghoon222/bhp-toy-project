@@ -6,7 +6,11 @@ import {
   ButtonActionProps,
 } from "../../../../shared/components/atoms/ButtonAction/ButtonAction";
 import { concat, each, filter, map, pipe, some, toArray } from "@fxts/core";
-import { ARTICLE_TYPES, SUB_CATEGORIES } from "../../../../shared/constants";
+import {
+  ARTICLE_TYPES,
+  MATER_CATEGORIES,
+  SUB_CATEGORIES,
+} from "../../../../shared/constants";
 
 export type ClothesModal = {};
 
@@ -53,6 +57,10 @@ export class ClothesModalEnable extends Enable {
       ARTICLE_TYPES,
       "articleType",
     );
+    this.view.masterCategoryButtons = this._createCategories(
+      MATER_CATEGORIES,
+      "masterCategory",
+    );
     this._checkSubmitState();
     this.view.redraw();
   }
@@ -61,6 +69,7 @@ export class ClothesModalEnable extends Enable {
     const queryParams = new URLSearchParams(window.location.search);
     queryParams.delete("articleType");
     queryParams.delete("subCategory");
+    queryParams.delete("masterCategory");
     return queryParams;
   }
 
@@ -90,6 +99,12 @@ export class ClothesModalEnable extends Enable {
         queryParams.append("subCategory", value);
       }),
     );
+    pipe(
+      this._getSelectedCategory(this.view.masterCategoryButtons),
+      each((value) => {
+        queryParams.append("masterCategory", value);
+      }),
+    );
     this._gotoInitPage(queryParams);
   }
 
@@ -109,7 +124,8 @@ export class ClothesModalEnable extends Enable {
   @on(CategoryItemEvent)
   private _checkSubmitState() {
     const isAbleSubmit = pipe(
-      concat(this.view.articleTypeButtons, this.view.subCategoryButtons),
+      concat(this.view.masterCategoryButtons, this.view.articleTypeButtons),
+      concat(this.view.subCategoryButtons),
       some((button) => button.isSelected),
     );
     this.view.submitButton.data.type = isAbleSubmit ? "lightBlue" : "disabled";
@@ -122,7 +138,7 @@ export class ClothesModalEnable extends Enable {
 
   private _createCategories(
     categories: string[],
-    queryName: "articleType" | "subCategory",
+    queryName: "articleType" | "subCategory" | "masterCategory",
   ) {
     const queryParams = new URLSearchParams(window.location.search);
     const querySet = new Set(queryParams.getAll(queryName));
@@ -157,6 +173,7 @@ export class ClothesModalView extends View<ClothesModal> {
   isActiveModal: boolean = false;
   subCategoryButtons: CategoryItem[] = [];
   articleTypeButtons: CategoryItem[] = [];
+  masterCategoryButtons: CategoryItem[] = [];
   resetButton: ButtonAction = new ButtonAction({
     label: "초기화",
     size: "large",
@@ -179,7 +196,7 @@ export class ClothesModalView extends View<ClothesModal> {
           <div class="clothes__modal--content">
             <h3>상품 분류</h3>
             <div class="clothes__modal--category">
-              ${this.articleTypeButtons}
+              ${this.masterCategoryButtons}
             </div>
 
             <h3>상품 종류</h3>

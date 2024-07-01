@@ -72,3 +72,13 @@ export const ARTICLE_TYPES = [
   "Toner",
   "Socks",
 ];
+
+export const MATER_CATEGORIES = [
+  "Free Items",
+  "Accessories",
+  "Footwear",
+  "Sporting Goods",
+  "Apparel",
+  "Home",
+  "Personal Care",
+];

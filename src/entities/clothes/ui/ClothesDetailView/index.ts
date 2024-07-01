@@ -7,11 +7,6 @@ import { client } from "../../../../shared";
 export type ClothesDetail = { cloth: Cloth };
 
 export class Index extends View<ClothesDetail> {
-  buyButton: ButtonAction = new ButtonAction({
-    label: "바로 구매하기",
-    type: "blue",
-    size: "large",
-  });
   cartButton: ButtonAction = new ButtonAction({
     label: "장바구니",
     type: "line",
@@ -35,9 +30,7 @@ export class Index extends View<ClothesDetail> {
           <div class="product__detail--tags">
             ${cloth.articleType} > ${cloth.subCategory}
           </div>
-          <div class="product__detail--buttons">
-            ${this.cartButton} ${this.buyButton}
-          </div>
+          <div class="product__detail--buttons">${this.cartButton}</div>
         </div>
       </section>
     `;
@@ -48,7 +41,11 @@ export class Index extends View<ClothesDetail> {
       client.createCart
         .mutate(Number(this.data.cloth.id))
         .then(() => {
-          if (window.confirm("장바구니 등록완")) {
+          if (
+            window.confirm(
+              "상품이 장바구니에 담겼습니다. 장바구니로 이동하시겠습니까?",
+            )
+          ) {
             window.location.href = window.location.origin + "/cart";
           }
         })
