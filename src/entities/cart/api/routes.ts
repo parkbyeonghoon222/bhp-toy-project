@@ -5,23 +5,35 @@ import { createCart } from "./post";
 import { deleteCart } from "./delete";
 
 export const cartApiRouter = router({
-  getCartsBySessionId: publicProcedure.input(z.string()).query(async (opts) => {
-    return await getCartsBySessionId(opts.input);
-  }),
+  getCartsBySessionId: publicProcedure
+    .input(z.string().optional())
+    .query(async ({ input, ctx }) => {
+      const carts =
+        ctx.req.cookies.sessionId || input
+          ? await getCartsBySessionId(ctx.req.cookies.sessionId || input)
+          : [];
+      ctx.req.carts = carts;
+      return carts;
+    }),
   createCart: publicProcedure
     .input(z.number())
     .mutation(async ({ input, ctx }) => {
       const cart = await createCart({
-        session_id: ctx.req.session.sessionId,
+        session_id: ctx.req.cookies.sessionId,
         cloth_id: input,
       });
-      ctx.req.carts = ctx.req.session.sessionId
-        ? await getCartsBySessionId(ctx.req.session.sessionId)
+      ctx.req.carts = ctx.req.cookies.sessionId
+        ? await getCartsBySessionId(ctx.req.cookies.sessionId)
         : [];
-      console.log(ctx.req.carts);
       return cart;
     }),
-  deleteCart: publicProcedure.input(z.number()).mutation(async (opts) => {
-    return await deleteCart(opts.input);
-  }),
+  deleteCart: publicProcedure
+    .input(z.number())
+    .mutation(async ({ input, ctx }) => {
+      const cart = await deleteCart(input);
+      ctx.req.carts = ctx.req.cookies.sessionId
+        ? await getCartsBySessionId(ctx.req.cookies.sessionId)
+        : [];
+      return cart;
+    }),
 });

@@ -45,9 +45,16 @@ export class Index extends View<ClothesDetail> {
 
   override onRender() {
     this.cartButton.addEventListener("click", () => {
-      client.createCart.mutate(Number(this.data.cloth.id)).then(() => {
-        window.alert("장바구니 등록완");
-      });
+      client.createCart
+        .mutate(Number(this.data.cloth.id))
+        .then(() => {
+          if (window.confirm("장바구니 등록완")) {
+            window.location.href = window.location.origin + "/cart";
+          }
+        })
+        .catch(() => {
+          window.alert("이미 등록된 상품입니다.");
+        });
     });
   }
 }

@@ -1,6 +1,31 @@
 #cart {
   margin: 0 auto;
   width: 100%;
+  max-width: ptr(1120);
   min-height: 100vh;
   height: 100vh;
+
+  & > div.cart__title {
+    width: 100%;
+    max-width: ptr(1120);
+    margin: 0 auto;
+    margin-bottom: ptr(24);
+
+    color: #141414;
+    font-size: ptr(28);
+    font-weight: 700;
+  }
+
+  & > div.cart__content {
+    width: 100%;
+    max-width: ptr(1120);
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+    gap: ptr(16);
+
+    border-top: 1px solid #d9d9d9;
+    border-bottom: 1px solid #d9d9d9;
+  }
 }

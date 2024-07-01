@@ -16,7 +16,6 @@ export class ClothesTabView extends View<Index> {
           <div class="product .font_bebas_40" data-active="active">
             PRODUCTS
           </div>
-          <div class="curation">CURATION</div>
         </div>
         <div class="count">총 ${this.data.count}개의 상품</div>
       </section>

@@ -9,9 +9,11 @@ import {
   ensureGuestSession,
   sessionMiddleware,
 } from "./middleware/session";
+import cookieParser from "cookie-parser";
 
 const server = app();
 
+server.use(cookieParser());
 server.use(sessionMiddleware);
 server.use(ensureGuestSession);
 server.use(ensureCartsBySessionId);
@@ -91,7 +93,8 @@ server.get(ClientRouter["/shop"].toString(), async function (req, res) {
   );
 });
 
-server.get(ClientRouter["/cart"].toString(), (req, res) => {
+server.get(ClientRouter["/cart"].toString(), async (req, res) => {
+  req.carts = await client.getCartsBySessionId.query(req.cookies.sessionId);
   const layoutData: LayoutData = {
     html: {
       is_mobile: "false",
@@ -106,7 +109,10 @@ server.get(ClientRouter["/cart"].toString(), (req, res) => {
   res.locals.layoutData = layoutData;
 
   res.send(
-    new MetaView(ClientRouter["/cart"](), res.locals.layoutData).toHtml(),
+    new MetaView(
+      ClientRouter["/cart"]({ carts: req.carts || [] }),
+      res.locals.layoutData,
+    ).toHtml(),
   );
 });
 

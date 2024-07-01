@@ -19,10 +19,8 @@ export class HeaderView extends Page<Header> {
     return html`
       <header id="shop__header">
         <div class="header__left">
-          <div class="header__logo">${MarppleShopLogo}</div>
+          <div class="header__logo"><a href="/shop">${MarppleShopLogo}</a></div>
           <div class="header__page">
-            <a href="/shop/creator">Creator</a>
-            <a href="/shop/pop-up">Pop-up Store</a>
             <a href="/shop">Shop</a>
           </div>
         </div>
@@ -36,9 +34,9 @@ export class HeaderView extends Page<Header> {
             <span class="search__icon">${SearchIcon}</span>
           </div>
           <div class="header__icons">
-            <div class="header__icon">${Heart}</div>
-            <div class="header__icon">${ShoppingCart}</div>
-            <div class="header__icon">${Profile}</div>
+            <div class="header__icon" data-index="heart">${Heart}</div>
+            <div class="header__icon" data-index="cart">${ShoppingCart}</div>
+            <div class="header__icon" data-index="profile">${Profile}</div>
           </div>
         </div>
       </header>
@@ -65,6 +63,13 @@ export class HeaderView extends Page<Header> {
       this.element().querySelector("input.header__input") as HTMLInputElement
     ).value;
     this._goPageBySearch(searchText);
+  }
+
+  @on("click", ".header__icon")
+  private _goTo(event: KeyboardEvent) {
+    const element = event.currentTarget as HTMLDivElement;
+    window.location.href =
+      window.location.origin + "/" + element.getAttribute("data-index");
   }
 
   private _goPageBySearch(search: string) {

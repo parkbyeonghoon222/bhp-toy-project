@@ -1,6 +1,6 @@
 import { ClientRouter } from "../src/app/routers";
 import "express-session";
-import { Cart } from "../src/entities/cart/types";
+import { Cloth } from "../src/entities/clothes/types";
 
 export {};
 
@@ -28,7 +28,11 @@ declare module "express-session" {
 declare global {
   namespace Express {
     interface Request {
-      carts: Cart[];
+      carts: Cloth[];
+      cookies: {
+        sessionId: string;
+        userId: number;
+      };
     }
   }
 }
