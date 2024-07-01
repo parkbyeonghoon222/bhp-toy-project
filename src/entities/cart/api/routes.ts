@@ -11,10 +11,15 @@ export const cartApiRouter = router({
   createCart: publicProcedure
     .input(z.number())
     .mutation(async ({ input, ctx }) => {
-      return await createCart({
-        session_id: ctx.req.session.guestId,
+      const cart = await createCart({
+        session_id: ctx.req.session.sessionId,
         cloth_id: input,
       });
+      ctx.req.carts = ctx.req.session.sessionId
+        ? await getCartsBySessionId(ctx.req.session.sessionId)
+        : [];
+      console.log(ctx.req.carts);
+      return cart;
     }),
   deleteCart: publicProcedure.input(z.number()).mutation(async (opts) => {
     return await deleteCart(opts.input);

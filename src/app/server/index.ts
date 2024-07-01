@@ -4,12 +4,17 @@ import { createContext } from "../../../server/db";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { client } from "../../shared";
 import { apiRouters } from "../../../server";
-import { ensureGuestSession, sessionMiddleware } from "./middleware/session";
+import {
+  ensureCartsBySessionId,
+  ensureGuestSession,
+  sessionMiddleware,
+} from "./middleware/session";
 
 const server = app();
 
 server.use(sessionMiddleware);
 server.use(ensureGuestSession);
+server.use(ensureCartsBySessionId);
 server.use(
   "/trpc",
   trpcExpress.createExpressMiddleware({
@@ -83,6 +88,25 @@ server.get(ClientRouter["/shop"].toString(), async function (req, res) {
       ),
       res.locals.layoutData,
     ).toHtml(),
+  );
+});
+
+server.get(ClientRouter["/cart"].toString(), (req, res) => {
+  const layoutData: LayoutData = {
+    html: {
+      is_mobile: "false",
+    },
+    head: {
+      title: "wordle",
+      description: "병플샵 장바구니",
+      link_tags: defaultLinks,
+    },
+  };
+
+  res.locals.layoutData = layoutData;
+
+  res.send(
+    new MetaView(ClientRouter["/cart"](), res.locals.layoutData).toHtml(),
   );
 });
 
