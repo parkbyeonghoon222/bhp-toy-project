@@ -4,6 +4,7 @@ import { createContext } from "../../../server/db";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { client } from "../../shared";
 import { apiRouters } from "../../../server";
+import { ensureGuestSession, sessionMiddleware } from "./middleware/session";
 
 const server = app();
 
@@ -14,6 +15,9 @@ server.use(
     createContext,
   }),
 );
+
+server.use(sessionMiddleware);
+server.use(ensureGuestSession);
 
 const defaultLinks = [
   { href: "https://unpkg.com/sanitize.css", rel: "stylesheet" },
