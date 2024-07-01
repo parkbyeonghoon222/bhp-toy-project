@@ -2,6 +2,7 @@ import { html, View } from "rune-ts";
 import "./clothesDetailView.scss";
 import { Cloth } from "../../types";
 import { ButtonAction } from "../../../../shared/components/atoms/ButtonAction/ButtonAction";
+import { client } from "../../../../shared";
 
 export type ClothesDetail = { cloth: Cloth };
 
@@ -42,5 +43,11 @@ export class Index extends View<ClothesDetail> {
     `;
   }
 
-  override onRender() {}
+  override onRender() {
+    this.cartButton.addEventListener("click", () => {
+      client.createCart.mutate(Number(this.data.cloth.id)).then(() => {
+        window.alert("장바구니 등록완");
+      });
+    });
+  }
 }

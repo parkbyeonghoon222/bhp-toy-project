@@ -8,6 +8,8 @@ import { ensureGuestSession, sessionMiddleware } from "./middleware/session";
 
 const server = app();
 
+server.use(sessionMiddleware);
+server.use(ensureGuestSession);
 server.use(
   "/trpc",
   trpcExpress.createExpressMiddleware({
@@ -15,9 +17,6 @@ server.use(
     createContext,
   }),
 );
-
-server.use(sessionMiddleware);
-server.use(ensureGuestSession);
 
 const defaultLinks = [
   { href: "https://unpkg.com/sanitize.css", rel: "stylesheet" },
