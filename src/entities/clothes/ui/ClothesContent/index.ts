@@ -46,7 +46,7 @@ export class ClothesContentView extends View<ClothesContent> {
 
   private _adjustCurrentHeight() {
     const siblings = this.element().parentElement!.children;
-    const allHeight = pipe(
+    this.height = pipe(
       siblings,
       filter((ele) => ele !== this.element()),
       filter((ele) => {
@@ -57,7 +57,6 @@ export class ClothesContentView extends View<ClothesContent> {
       sum,
       (height) => `calc(100vh - ${height}px)`,
     );
-    this.height = allHeight;
   }
 
   private _createClothesViews(clothes: Cloth[]): ClothesCardView[] {

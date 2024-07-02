@@ -11,13 +11,13 @@ export const sessionMiddleware = session({
   cookie: { secure: false },
 });
 
-export const ensureGuestSession = (
+export const ensureGuestSession = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   const sessionId = req.cookies.sessionId;
-  const userId = req.cookies.userId;
+  // const userId = req.cookies.userId;
   if (!req.path.includes("trpc") && !sessionId) {
     const sessionIdCookie = uuidv4();
     res.cookie("sessionId", sessionIdCookie, {
@@ -25,7 +25,7 @@ export const ensureGuestSession = (
       httpOnly: true,
       secure: false,
     });
-    createSession({
+    await createSession({
       sessionId: sessionIdCookie,
     });
   }

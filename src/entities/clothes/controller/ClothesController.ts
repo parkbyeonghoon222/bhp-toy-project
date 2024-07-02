@@ -8,7 +8,7 @@ import {
 import { PaginationView } from "../../../shared/components/molecule/Pagination/Pagination";
 
 // 이게 좋은 방법일까?
-export class FilterModalEnable extends Enable {
+export class FilterButtonToModal extends Enable {
   constructor(
     public override view: ClothesFilterView,
     public targetView: ClothesModalView,
@@ -24,7 +24,7 @@ export class FilterModalEnable extends Enable {
 }
 
 export class ClothesController<T extends object, IV extends View<T>> {
-  private filterModal: FilterModalEnable;
+  private filterModal: FilterButtonToModal;
 
   constructor(
     public clothesContent: ClothesContentView,
@@ -33,7 +33,7 @@ export class ClothesController<T extends object, IV extends View<T>> {
     public paginationView: PaginationView,
     public clothesModalView: ClothesModalView,
   ) {
-    this.filterModal = new FilterModalEnable(
+    this.filterModal = new FilterButtonToModal(
       this.clothesFilter,
       this.clothesModalView,
     );

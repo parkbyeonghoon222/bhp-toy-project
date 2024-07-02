@@ -1,6 +1,6 @@
 import { clothesApiRouter } from "../src/entities/clothes/api";
 import { wordleApiRouter } from "../src/entities/wordle/api";
-import { cartApiRouter } from "../src/entities/cart/api/routes";
+import { cartApiRouter } from "../src/entities/cart/api";
 
 import { mergeRouters } from "./db";
 
