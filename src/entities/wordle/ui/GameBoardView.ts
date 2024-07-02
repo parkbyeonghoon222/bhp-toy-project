@@ -59,32 +59,32 @@ export class GameBoardView extends View<GameBoard> {
 
     window.addEventListener("keydown", (e: KeyboardEvent) => {
       if (e.code.includes("Key")) {
-        this.appendBoardItem(e.code.replace("Key", ""));
+        this._appendBoardItem(e.code.replace("Key", ""));
       } else if (e.code === "Backspace") {
-        this.removeBoardItem();
+        this._removeBoardItem();
       } else if (e.code === "Enter") {
-        this.submitAnswer();
+        this._submitAnswer();
       }
     });
 
     this.addEventListener(KeyboardSelected, (e: KeyboardSelected) => {
       if (e.detail.variant === "enter") {
-        this.submitAnswer();
+        this._submitAnswer();
       } else if (e.detail.variant === "backspace") {
-        this.removeBoardItem();
+        this._removeBoardItem();
       } else {
-        this.appendBoardItem(e.detail.char);
+        this._appendBoardItem(e.detail.char);
       }
     });
   }
 
-  private getCurrentBoardItem() {
+  private _getCurrentBoardItem() {
     return this.gameBoardItemViews[this.currentIndex];
   }
 
-  private appendBoardItem(char: string) {
+  private _appendBoardItem(char: string) {
     if (this.currentIndex < this.tryCnt * 5 + 5) {
-      this.getCurrentBoardItem().setBoardItem(char, "entered");
+      this._getCurrentBoardItem().setBoardItem(char, "entered");
       this.currentIndex =
         this.currentIndex + 1 < this.tryCnt * 5 + 5
           ? this.currentIndex + 1
@@ -92,9 +92,9 @@ export class GameBoardView extends View<GameBoard> {
     }
   }
 
-  private removeBoardItem() {
+  private _removeBoardItem() {
     if (this.currentIndex >= this.tryCnt * 5) {
-      this.getCurrentBoardItem().setBoardItem("", "empty");
+      this._getCurrentBoardItem().setBoardItem("", "empty");
       this.currentIndex =
         this.currentIndex - 1 >= this.tryCnt * 5
           ? this.currentIndex - 1
@@ -102,8 +102,8 @@ export class GameBoardView extends View<GameBoard> {
     }
   }
 
-  private resetGame() {
-    this.getTargetWord()
+  private _resetGame() {
+    this._getTargetWord()
       .then(() => {
         this.tryCnt = 0;
         this.currentIndex = 0;
@@ -121,43 +121,43 @@ export class GameBoardView extends View<GameBoard> {
       });
   }
 
-  private winGame() {
+  private _winGame() {
     alert("정답입니다!");
-    this.resetGame();
+    this._resetGame();
   }
 
-  private looseGame() {
+  private _looseGame() {
     alert(`오답입니다. 정답은 ${this.targetWord}`);
-    this.resetGame();
+    this._resetGame();
   }
 
-  private isCurrentBoardItem = (boardItem: GameBoardItemView) => {
+  private _isCurrentBoardItem = (boardItem: GameBoardItemView) => {
     return (
       boardItem.data.index < this.tryCnt * 5 + 5 &&
       boardItem.data.index >= this.tryCnt * 5
     );
   };
 
-  private getCurrentSubmitWord() {
+  private _getCurrentSubmitWord() {
     return pipe(
-      this.getCurrentBoardItems(),
+      this._getCurrentBoardItems(),
       filter((boardItem) => !!boardItem.data.char),
       map((board) => board.data.char),
       reduce((prevChar, curChar) => `${prevChar}${curChar}`),
     );
   }
 
-  private getCurrentBoardItems() {
+  private _getCurrentBoardItems() {
     return pipe(
       this.gameBoardItemViews,
-      filter(this.isCurrentBoardItem),
+      filter(this._isCurrentBoardItem),
       toArray,
     );
   }
 
-  private changeCurrentBoardItems() {
+  private _changeCurrentBoardItems() {
     return pipe(
-      this.getCurrentBoardItems(),
+      this._getCurrentBoardItems(),
       each((boardItem) => {
         if (boardItem.data.char === this.targetWord[boardItem.data.index % 5]) {
           boardItem.setBoardItem(boardItem.data.char, "correct");
@@ -170,21 +170,21 @@ export class GameBoardView extends View<GameBoard> {
     );
   }
 
-  private changeNextBoardItems() {
+  private _changeNextBoardItems() {
     return pipe(
-      this.getCurrentBoardItems(),
+      this._getCurrentBoardItems(),
       each((boardItem) => {
         boardItem.setBoardItem(boardItem.data.char, "empty");
       }),
     );
   }
 
-  private goNextLine() {
+  private _goNextLine() {
     this.tryCnt++;
     this.currentIndex++;
   }
 
-  private changeKeyboardItemByVariant(
+  private _changeKeyboardItemByVariant(
     variant: "include" | "incorrect" | "correct",
   ) {
     pipe(
@@ -202,32 +202,32 @@ export class GameBoardView extends View<GameBoard> {
     );
   }
 
-  private submitAnswer() {
+  private _submitAnswer() {
     // 현재 줄의 아이템들 가져오기
-    const word = this.getCurrentSubmitWord();
+    const word = this._getCurrentSubmitWord();
 
     if (word.length === 5) {
       // 게임 승패 판단
       if (word === this.targetWord) {
-        this.winGame();
+        this._winGame();
       } else if (this.tryCnt === 5) {
-        this.looseGame();
+        this._looseGame();
       }
       // 게임 진행이 계속될 시 현재줄 혹은 다음줄 색깔 변경
       else {
-        this.changeCurrentBoardItems();
-        this.goNextLine();
-        this.changeNextBoardItems();
+        this._changeCurrentBoardItems();
+        this._goNextLine();
+        this._changeNextBoardItems();
 
         // 키보드 색상 변경
-        this.changeKeyboardItemByVariant("include");
-        this.changeKeyboardItemByVariant("correct");
-        this.changeKeyboardItemByVariant("incorrect");
+        this._changeKeyboardItemByVariant("include");
+        this._changeKeyboardItemByVariant("correct");
+        this._changeKeyboardItemByVariant("incorrect");
       }
     }
   }
 
-  private async getTargetWord() {
+  private async _getTargetWord() {
     this.targetWord = await client.getRandomWord.query();
     localStorage.setItem("marpple__wordle", this.targetWord);
     return this.targetWord;
